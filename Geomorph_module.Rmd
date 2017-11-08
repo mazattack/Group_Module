@@ -1,0 +1,105 @@
+---
+title: "Geomorph_module"
+author: "Julie Jung"
+date: "November 7, 2017"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+
+# first Header {.tabset} 
+## section
+### subsection
+#### sub subsection
+## section
+
+I followed [this link] (file:///Volumes/Julie17/Quick_Guide_to_Geomorph-3.0.pdf) heavily.
+
+
+
+To install geomorph from CRAN
+```{r}
+install.packages("geomorph", dependencies = TRUE)
+```
+
+This will install the latest version of geomorph from CRAN https://cran.rstudio.com/.
+
+CRAN restricts the number of updates package maintainers can make in a year. Occasionally, bugs slip
+through that need to be fixed immediately. We maintain a “Stable” version of the current CRAN version of geomorph in our GitHub repository, which can be installed as source.
+
+To install the source package from GitHub:
+
+```{r}
+install.packages("devtools", dependencies = TRUE)
+devtools::install_github("geomorphR/geomorph",ref = "Stable")
+```
+
+
+Load the package: 
+```{r}
+library(geomorph)
+```
+
+You’ll notice that a black warning message is printed in the console saying the package rgl and ape are also loaded. All of the 3D plots of interactive functions of geomorph are run through rgl https://cran.r-project.org/web/packages/rgl/index.html. ape is called for several phylogenetic analyses.
+
+
+
+There are 12 datasets included with geomorph: plethodon, scallops, hummingbirds, larvalTails, larvalMorph, mosquito, ratland, plethspecies, plethShapeFood, pupfish, motionpaths and scallopPLY. 
+
+It is advised to run and examine these example datasets before performing own analyses in order to understand how a function and its options work.
+
+To load an example dataset:
+
+```{r}
+data(plethodon)
+attributes(plethodon)
+
+#explore these data
+head(plethodon$land[,,1])
+head(plethodon$links)
+plethodon$species
+plethodon$site
+head(plethodon$outline)
+
+```
+
+
+
+```{r}
+
+```
+
+COLLECTING LANDMARKS: 
+
+Digitize 2D landmarks on .jpg files using the digitize2d function in geomorph
+
+user guide: https://rdrr.io/cran/geomorph/man/digitize2d.html
+
+```{r}
+digitize2d(filelist, nlandmarks, scale = NULL, tpsfile, MultScale = FALSE,
+  verbose = TRUE)
+
+```
+filelist = list of names of jpeg images to be digitized
+nlandmarks = number of landmarks to be digitized
+scale = a vector containing the length of the scale to be placed on each image (eg. 10 for 10mm)
+tpsfile = the name of a TPS file to be created or read
+Multscale = a logical option indicating if the coordinates should be pre-multiplied by scale
+verbose = logical. user decides whether to digitize in verbose or silent format. default is verbose. 
+
+
+```{r}
+
+```
+
+You can also collect landmarks in ImageJ. 
+http://www.indiana.edu/~g562/Handouts/Collecting%20Landmarks.pdf
+
+```{r}
+
+```
+
+
+
