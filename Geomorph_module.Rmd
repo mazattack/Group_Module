@@ -9,19 +9,24 @@ output:
     toc_float: true
 ---
 
-# first Header {.tabset} 
+# Getting Started in Geometric Morphometrics in R using the Geomorph R Package {.tabset} 
 ## section
 ### subsection
 #### sub subsection
 ## section
 
-I followed [this link] (file:///Volumes/Julie17/Quick_Guide_to_Geomorph-3.0.pdf) heavily.
+# Getting Started in Geometric Morphometrics in R using the Geomorph R Package {.tabset}
 
+I followed [this link] (file:///Volumes/Julie17/Quick_Guide_to_Geomorph-3.0.pdf) heavily for general geomorph proceedings. 
 
-
-To install geomorph from CRAN
+To set working directory: 
 ```{r}
-install.packages("geomorph", dependencies = TRUE)
+setwd('/Users/juliejung/Documents/GitHub/AN 597/Group_Module') #set working directory    
+```
+
+To install geomorph from CRAN:
+```{r}
+# install.packages("geomorph", dependencies = TRUE)
 ```
 
 This will install the latest version of geomorph from CRAN https://cran.rstudio.com/.
@@ -32,12 +37,12 @@ through that need to be fixed immediately. We maintain a “Stable” version of
 To install the source package from GitHub:
 
 ```{r}
-install.packages("devtools", dependencies = TRUE)
-devtools::install_github("geomorphR/geomorph",ref = "Stable")
+#install.packages("devtools", dependencies = TRUE)
+#devtools::install_github("geomorphR/geomorph",ref = "Stable")
 ```
 
 
-Load the package: 
+To load the package: 
 ```{r}
 library(geomorph)
 ```
@@ -45,6 +50,7 @@ library(geomorph)
 You’ll notice that a black warning message is printed in the console saying the package rgl and ape are also loaded. All of the 3D plots of interactive functions of geomorph are run through rgl https://cran.r-project.org/web/packages/rgl/index.html. ape is called for several phylogenetic analyses.
 
 
+## Exploring sample data from Geomorph: 
 
 There are 12 datasets included with geomorph: plethodon, scallops, hummingbirds, larvalTails, larvalMorph, mosquito, ratland, plethspecies, plethShapeFood, pupfish, motionpaths and scallopPLY. 
 
@@ -65,23 +71,84 @@ head(plethodon$outline)
 
 ```
 
+## Collecting Landmarks
+
+### Important Requirements for Landmarks
+
+Remember the following requirements for landmarks:
+a. Each image must have the same number of landmarks;
+b. The landmarks on each image must be in the same order;
+c. Landmarks are ordinarily placed on homologous points, points that can be
+replicated from object to object based on common morphology, common
+function, or common geometry;
+d. You may have to flip some images so that are not reversed left to right (e.g., if
+most of your images show the right side, flip left side images so that they
+mimic right side)
+
+### Collecting landmark coordinates with ImageJ. 
+
+[ImageJ – open-source software for image processing] (http://rsbweb.nih.gov/ij/download.html)
+[Point Picker plugin for ImageJ] (http://bigwww.epfl.ch/thevenaz/pointpicker/)
+
+#### Installing Point Picker: 
+
+Point Picker is an interactive ImageJ plugin that allows storage and retrieval of a collection of landmarks
+
+Mac OS X
+1. Download the install image
+2. Open the PointPicker.dmg
+3. Copy the folder PointPicker to Applications -> ImageJ -> Plugins
+Windows
+1. Download the installation package
+2. Unzip it
+3. Copy the folder PointPicker to C:/Program Files/ImageJ/Plugins
 
 
-```{r}
+#### Collecting landmarks in ImageJ:
 
-```
+[This user guide on digitizing in ImageJ] (http://www.indiana.edu/~g562/Handouts/Collecting%20Landmarks.pdf) is really helpful. 
 
-COLLECTING LANDMARKS: 
+To collect landmarks using ImageJ
+1. Place all your images in a single folder by themselves
+2. Start ImageJ
+3. open the first image
 
-Digitize 2D landmarks on .jpg files using the digitize2d function in geomorph
+Repeat the following steps for each image
+4. Start the PointPicker plugin: Plugins -> PointPicker -> PointPicker
+Choose the pen tool (the one with a +) to add points
+6. Carefully place each of your points on the image, always in the same order. If you need to adjust the position, choose the move tool
+7. When all points are placed, click the output button (the one with a piece of paper as the icon). Use the Show option.
+8. Highlight all the data, copy it, paste it into Excel with one blank line above, and one blank line below
+9. The x and y coordinates of your points are in the 2nd and 3rd columns.
+10. Above the x-coordinates, enter the text "LM=" followed by the number of points (e.g. LM=5)
+11. Below the x-coordinates, enter the text "ID=" followed by the taxon name (e.g. ID=Archaeopteryx)
+12. Clear the data window (by closing or clicking the red circle (MAC))
+13. Click the Return to ImageJ button (microscope icon)
+14. Open next image
+15. Repeat from Step 4 until all images are finished
 
-user guide: https://rdrr.io/cran/geomorph/man/digitize2d.html
+#### Save the landmarks in TPS format
+1. In Excel, highlight columns 2 & 3 from the first “LM=13” to the last
+“ID=Ateleaspis_tesselatai” and copy. For this lab that should be 165 rows with
+two columns.
+2. In Word, use Paste Special to paste these rows as plain text. If you don’t paste
+as plain text then you will have trouble importing the data into Mathematica.
+3. Save the Word document as plain text somewhere convenient.
+
+### Collecting landmark coordinates with R. 
+
+We can digitize 2D landmarks on .jpg files using the digitize2d function in Geomorph. 
+
+[This user guide] (https://rdrr.io/cran/geomorph/man/digitize2d.html) is really helpful for this. 
+Also see 15.1 in [this user guide](file:///Volumes/Julie17/Quick_Guide_to_Geomorph-3.0.pdf). 
+
+The user provides a list of image names, the number of landmarks to be digitized, and the name of an output TPS file. An option is included to allow the user to digitize a scale on each image to convert the landmark coordinates from pixels into meaningful units. Landmarks to be digitized can include both fixed landmarks and semi-landmarks, the latter of which are to be designated as "sliders" for subsequent analysis (see the function define.sliders).
 
 ```{r}
 digitize2d(filelist, nlandmarks, scale = NULL, tpsfile, MultScale = FALSE,
   verbose = TRUE)
-
 ```
+
 filelist = list of names of jpeg images to be digitized
 nlandmarks = number of landmarks to be digitized
 scale = a vector containing the length of the scale to be placed on each image (eg. 10 for 10mm)
@@ -89,17 +156,118 @@ tpsfile = the name of a TPS file to be created or read
 Multscale = a logical option indicating if the coordinates should be pre-multiplied by scale
 verbose = logical. user decides whether to digitize in verbose or silent format. default is verbose. 
 
+#### The Digitizing Session
+
+Digitizing landmarks from 2D photos requires that a scale bar is placed in the image in order to scale the coordinate data. The 'scale' option requires: a single number (e.g. 10) which means that the scale to be measured in all images is a 10mm scale bar; OR a vector the same length as the filelist containing a number for the scale of each image. If scale=NULL, then the digitized coordinates will not be scaled. This option is NOT recommended.
+
+Users may digitize all specimens in one session, or may return at a later time to complete digitizing. In the latter case, the user provides the same filelist and TPS file and the function will determine where the user left off.
+
+If specimens have missing landmarks, these can be incorporated during the digitizing process using the 'a' option as described below (a=absent).
+
+#### Specimen Digitizing
+
+Digitizing landmarks involves landmark selection using a mouse in the plot window, using the LEFT mouse button (or regular button for Mac users):
+
+Digitize the scale bar (if requested) by selecting the two end points. Use a single click for start and end points. The user is asked whether the system should keep or discard the digitized scale bar.
+Digitize each landmark with single click and the landmark is shown in red.
+If verbose = TRUE, digitizing is interactive between landmark selection using a mouse and the R console. Once a landmark is selected, the user is asked if the system should keep or discard the selection (y/n/a). If "y", the user is asked to continue to select the next landmark. If "n", the user is asked to select it again.
+
+To digitize a missing landmark, simply click on any location in the image. Then, when prompted to keep selection, choose 'a' (for absent). Missing landmarks can only be included during the digitizing process when verbose=TRUE.
+
+If verbose = FALSE the digitizing of landmarks is continuous and uninterrupted. Here the user will not be prompted to approve each landmark selection.
+
+At the end of digitizing, the landmark coordinates are written to a TPS file. By default, the x,y values are unscaled if a vector of scales is included, and the scale is returned on line SCALE= after each specimen x,y data. Optionally, one may have the coordinates pre-multiplied by scale by using the option MultScale=TRUE.
+
+#### Value from digitized2d: 
+
+Function returns a tps file containing the digitized landmark coordinates.
+
+### Importing landmark data into R
+
+Whether you used R or ImageJ to collect digitized landmark coordinates, you can use R to import those landmark data: 
+
+Landmark data brought into R can be in a variety of formats. Our functions can deal with the most common:
+tps files, nts files, and morphologicka files. 
+
+The following section describes how to use these functions on these files. 
+
+At the end, we describe how data brought in as a simple excel-style matrix can be imported and manipluated into the correct format.
+
+All of these functions return a 3D array, which is the preferred data format for landmark data.
+
+```{r}
+readland.tps(file, specID = c("None", "ID", "imageID"), readcurves = FALSE, warnmsg = TRUE)
+```
+
+Arguments
+* file A .tps file containing two- or three-dimensional landmark data
+* specID a character specifying whether to extract the specimen ID names from the ID or IMAGE lines
+(default is “None”)
+* readcurves A logical value stating whether CURVES= field and associated coordinate data will be read as
+semilandmarks (TRUE) or ignored (FALSE)
+* warnmsg A logical value stating whether warnings should be printed
+
+This function reads a .tps file containing two- or three-dimensional landmark coordinates for a set of specimens.
+Tps files are text files in one of the standard formats for geometric morphometrics (see Rohlf 2010). Twodimensional
+landmarks coordinates are designated by the identifier “LM=”, while three-dimensional data are
+designated by “LM3=”. Landmark coordinates are multiplied by their scale factor if this is provided for all
+specimens. If one or more specimens are missing the scale factor (there is no line “SCALE=”), landmarks are
+treated in their original units.
+
+The name of the specimen can be given in the tps file by “ID=” (use specID=”ID”) or “IMAGE=” (use
+specID= “imageID”), otherwise the function defaults to specID= “None”.
+
+If there are curves defined in the file (i.e., CURVES= fields), the option readcurves should be used. When
+readcurves = TRUE, the coordinate data for the curves will be returned as semilandmarks and will be
+appended to the fixed landmark data. Then the user needs to use define.sliders to create a matrix designating
+how the curve points will slide (used by ‘curves=’ in gpagen). When readcurves = FALSE, only the landmark
+data are returned (the curves are ignored).
+
+At present, all other information that can be contained in tps files (comments, variables, radii, etc.) is ignored.
+
+### Data inspection:
+
+#### Plot landmark coordinates for all specimens (plotAllSpecimens)
+Function plots landmark coordinates for a set of specimens.
+
+```{r}
+plotAllSpecimens(A, mean = TRUE, links = NULL, label = FALSE, plot.param = list())
+```
+Arguments
+• A A 3D array (p x k x n) containing GPA-aligned coordinates for a set of specimens
+• mean A logical value indicating whether the mean shape should be included in the plot
+• links An optional matrix defining for links between landmarks
+• pointscale An optional value defining the size of the points for all specimens
+• meansize An optional value defining the size of the points representing the average specimen
+The function creates a plot of the landmark coordinates for all specimens. This is useful for examining
+patterns of shape variation after GPA. If “mean=TRUE”, the mean shape will be calculated and added to
+the plot. Additionally, if a matrix of links is provided, the landmarks of the mean shape will be connected
+by lines. The link matrix is an m x 2 matrix, where m is the desired number of links. Each row of the link
+matrix designates the two landmarks to be connected by that link. The function will plot either two- or
+three-dimensional data.
+
+Example for 2D data: 
 
 ```{r}
 
+Y.gpa<-gpagen(plethodon$land, print.progress = FALSE) # GPA
+plethodon$links
+
+plotAllSpecimens(Y.gpa$coords,links=plethodon$links,label=T,
+plot.param = list(pt.bg = "green", mean.cex=1, link.col="red",
+txt.pos=3, txt.cex=1))
+
 ```
 
-You can also collect landmarks in ImageJ. 
-http://www.indiana.edu/~g562/Handouts/Collecting%20Landmarks.pdf
+Example for 3D data: 
 
 ```{r}
 
+data(scallops)
+Y.gpa <- gpagen(A=scallops$coorddata, curves=scallops$curvslide,
+surfaces=scallops$surfslide, print.progress = FALSE)
+scallinks <- matrix(c(1,rep(2:16, each=2),1), nrow=16, byrow=TRUE) # make links matrix
+plotAllSpecimens(Y.gpa$coords,links=scallinks,
+plot.param= list(pt.bg = "blue",link.col="red"))
+
 ```
-
-
-
