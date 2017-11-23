@@ -271,3 +271,109 @@ plotAllSpecimens(Y.gpa$coords,links=scallinks,
 plot.param= list(pt.bg = "blue",link.col="red"))
 
 ```
+
+
+#Working with 3D data
+
+###Packages used in this section
+```{r}
+library(geomorph)
+library(Morpho)
+library(abind)
+library(curl)
+```
+
+###Importing 3D data
+
+PLY data format...
+You can import ply in ASCII format using the Geomorph package or use Morpho to import binary ply.
+
+Here I am importing A1 and A2, two 3D scans of arrow heads downloaded from Sketchfab (ref) and placed in the working directory. (I will convert these to a curl eventually)
+```{r Downloading data to the wd}
+library(curl)
+f1 <- curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A1.ply")
+library(geomorph)
+A1<-read.ply(f1)#using Geomorph
+```
+```{r}
+f2 <- curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A2.ply")
+A2<-read.ply(curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A2.ply"))
+```
+
+```{r}
+library(Morpho)
+name<-file2mesh(file name)#using Morpho
+```
+
+### Selecting landmarks
+
+For geomorphometric analysis, we must first select landmarks on each of the specimens, which will serve as standardized points across which measurements and comparisons can be made. 
+
+digit.fixed is used for selecting fixed landmarks that do not change from specimen to specimen. digitsurface can then be used to place equal spaced landmarks between those points to represent a surface, while digit.curve can be used to fit curves on the specimen (I haven't really figured out surface and curve yet)
+
+Use digit.fixed to selected fixed landmarks on the specimen, this will save a nts landmark file to the directory. You will use the console to confirm each point using y/n. Double right click to select the landmark. 
+```{r}
+A1_fix<-digit.fixed(A1, 10)#number of fixed landmarks to create
+```
+```{r}
+A2_fix<- digit.fixed(A2, 10)#number of fixed landmarks to create
+```
+
+You can view the landmark and 3D models together using...
+
+
+
+### Loading exisiting landmark data
+You can also read in landmark data from another software. Here we will read in the nts file from A1. 
+
+```{r}
+A1_nts<-readland.nts("A1.nts")
+```
+```{r}
+A2_nts<-readland.nts("A2.nts")
+```
+Read the nts files in to create a 3D array. 
+```{r}
+filelist<-(c("A1.nts", "A2.nts"))
+filelist
+A1_A2_nts<-readmulti.nts(filelist)
+```
+
+Or bind the landmark files together into a 3d array for use in Geomorph using abind package. 
+```{r}
+require(abind)
+dim(A1_fix)
+A1_A2_fix<-abind(A1_fix, A2_fix, along=3)
+dim(A1_A2_fix)
+```
+
+### Visualising landmarks
+
+We can now view all the landmarks together, these are unaligned.
+```{r}
+plotAllSpecimens(A1_A2_nts)
+str(A1_A2_nts)
+```
+
+```{r}
+plotAllSpecimens(A1_A2_fix)
+str(A1_A2_fix)
+```
+Note how the outlines of the artifacts are not aligned in the same space. 
+
+
+### GPAGEN function
+This function performs a procrustes analysis to align the points into the same space. 
+
+We use the gpagen function to align the points
+```{r}
+GPA<-gpagen(a1_a2)
+```
+```{r}
+str(GPA)
+```
+
+```{r}
+plot3d(GPA)
+```
+
