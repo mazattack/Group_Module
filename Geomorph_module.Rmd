@@ -312,9 +312,15 @@ For geomorphometric analysis, we must first select landmarks on each of the spec
 digit.fixed is used for selecting fixed landmarks that do not change from specimen to specimen. digitsurface can then be used to place equal spaced landmarks between those points to represent a surface, while digit.curve can be used to fit curves on the specimen (I haven't really figured out surface and curve yet)
 
 Use digit.fixed to selected fixed landmarks on the specimen, this will save a nts landmark file to the directory. You will use the console to confirm each point using y/n. Double right click to select the landmark. 
+
+Note: this is kind of annoying, it is hard to orient, and doesn't seem to select the surface, but the surface o fthe mesh behind it. 
 ```{r}
 A1_fix<-digit.fixed(A1, 10)#number of fixed landmarks to create
 ```
+```{r}
+plotspec(A1, A1_fix)#these may not overlap
+```
+
 ```{r}
 A2_fix<- digit.fixed(A2, 10)#number of fixed landmarks to create
 ```
@@ -375,5 +381,15 @@ str(GPA)
 
 ```{r}
 plot3d(GPA)
+```
+
+
+
+
+TESTING
+
+- creating a surface from the digitfix
+```{r}
+d_surf<-digitsurface(A1, A1_nts,1, center = TRUE) #not sure why this doesnt work
 ```
 
