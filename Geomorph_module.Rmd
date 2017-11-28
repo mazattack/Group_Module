@@ -289,6 +289,7 @@ PLY data format...
 You can import ply in ASCII format using the Geomorph package or use Morpho to import binary ply.
 
 Here I am importing A1 and A2, two 3D scans of arrow heads downloaded from Sketchfab (ref) and placed in the working directory. (I will convert these to a curl eventually)
+**1**
 ```{r Downloading data to the wd}
 library(curl)
 f1 <- curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A1.ply")
@@ -314,12 +315,39 @@ digit.fixed is used for selecting fixed landmarks that do not change from specim
 Use digit.fixed to selected fixed landmarks on the specimen, this will save a nts landmark file to the directory. You will use the console to confirm each point using y/n. Double right click to select the landmark. 
 
 Note: this is kind of annoying, it is hard to orient, and doesn't seem to select the surface, but the surface o fthe mesh behind it. 
+**2**
 ```{r}
-A1_fix<-digit.fixed(A1, 10)#number of fixed landmarks to create
+A1_fix<-digit.fixed(A1, 8)#number of fixed landmarks to create
 ```
 ```{r}
 plotspec(A1, A1_fix)#these may not overlap
 ```
+**3** Build template
+```{r}
+A1_temp<-buildtemplate(A1, A1_fix, 100, 1)
+```
+
+**4** edit template
+```{r}
+A1_temp_ed<-editTemplate(A1_temp, 8, 1)#remove an erroneus point
+```
+**5**Use template to create surface points from a new artiface
+```{r}
+digitsurface(A2, 8, 1, TRUE)
+```
+
+## Add n as many samples as you want in this step.
+```{r}
+library(curl)
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+f3 <- curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A2.ply")
+A3<-read.ply(curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A3.ply"))
+digitsurface(A3, 8, 1, TRUE)
+```
+
+
+
+
 
 ```{r}
 A2_fix<- digit.fixed(A2, 10)#number of fixed landmarks to create
@@ -340,9 +368,10 @@ A2_nts<-readland.nts("A2_MCC.nts")#I changed the name so they would not be overw
 ```
 Read the nts files in to create a 3D array. 
 ```{r}
-filelist<-(c("A1.nts", "A2.nts"))
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+filelist<-(c("A1.nts", "A2.nts", "A3.nts"))
 filelist
-A1_A2_nts<-readmulti.nts(filelist)
+arrow_nts<-readmulti.nts(filelist)
 ```
 
 Or bind the landmark files together into a 3d array for use in Geomorph using abind package. 
@@ -352,12 +381,15 @@ dim(A1_fix)
 A1_A2_fix<-abind(A1_fix, A2_fix, along=3)
 dim(A1_A2_fix)
 ```
+```{r}
+plot3d(A1_fix)
+```
 
 ### Visualising landmarks
 
 We can now view all the landmarks together, these are unaligned.
 ```{r}
-plotAllSpecimens(A1_A2_nts)
+plotAllSpecimens(arrow_nts)
 str(A1_A2_nts)
 ```
 
@@ -367,29 +399,68 @@ str(A1_A2_fix)
 ```
 Note how the outlines of the artifacts are not aligned in the same space. 
 
+```{r}
+```
 
 ### GPAGEN function
 This function performs a procrustes analysis to align the points into the same space. 
 
 We use the gpagen function to align the points
 ```{r}
-GPA<-gpagen(A1_A2_fix)
+GPA<-gpagen(arrow_nts)
 ```
 ```{r}
 str(GPA$coords)
 ```
 
 ```{r}
-plotspec(GPA)
+plotAllSpecimens(GPA$coords)
 ```
-
-
-
-
-TESTING
-
-- creating a surface from the digitfix
 ```{r}
-d_surf<-digitsurface(A1, A1_nts,1, center = TRUE) #not sure why this doesnt work
+plotTangentSpace(GPA$coords)
 ```
+
+
+
+Visualizing differences in specimens
+
+
+
+```{r}
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+ref<-mshape(GPA$coords)
+plotRefToTarget(ref,GPA$coords[,,1],method="points")
+scallinks <- matrix(c(1,rep(2:8, each=2),1), nrow=8, byrow=TRUE)
+```
+```{r}
+plotRefToTarget(ref,GPA$coords[,,1],method="points", links = scallinks)
+scallinks <- matrix(c(1,rep(2:8, each=2),1), nrow=8, byrow=TRUE)
+```
+```{r}
+plotRefToTarget(ref,GPA$coords[,,3],gridPars=gridPar(tar.pt.bg = "red", tar.link.col="blue",
+tar.link.lwd=2), method="point", links = scallinks)
+```
+```{r}
+plotAllSpecimens(GPA$coords, links = scallinks)
+```
+
+
+```{r}
+plot(ref)
+```
+
+IMPORTING TPS BULK
+```{r}
+require(abind)
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+filelist <- list.files(pattern = ".tps")
+mydata <- NULL
+for(i in filelist){
+  tmp <- readland.tps(i)
+  mydata$coords <- abind(mydata$coords, tmp)
+  mydata$names <- rbind(mydata$names,cbind(dimnames(tmp)[[3]], i))
+}
+colnames(mydata$names) <- c("specimen", "file")
+```
+
 
