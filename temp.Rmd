@@ -1,0 +1,256 @@
+---
+title: "TEMP"
+output: html_notebook
+---
+
+#Working with 3D data TITLE
+
+#Geometric morphometric analysis in R
+
+Geometric morphometrics is a technique used to quantify and analyze patterns in shapes across 2D and 3D specimens. It has been used, for example, to ##### REF. In this tutorial, you will learn how to import and create landmark data in R for morphometric analysis using the package Geomorph. 
+Loading 3D data into R. 
+
+###Packages used in this section
+```{r load packages}
+library(geomorph)
+library(Morpho)
+library(abind)
+library(curl)
+```
+
+##Importing 3D data
+
+The Geomorph package allows you to input 3D data in ASCII ".ply" format which is a **common output from 3D scanners and 3D software packages**. To import 3D data in binary ".ply" format, you can use the Morpho package. Here you will load three 3D scans of archaeological arrow heads from an online repository of 3D models “sketchfab”**[insert hyperlink]**. 
+
+```{r load, eval=F}
+library(curl)
+library(geomorph)
+f1 <- curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A1.ply")
+A1<-read.ply(f1) #using Geomorph
+f2 <- curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A2.ply")
+A2<-read.ply(curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A2.ply"))
+f3 <- curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A2.ply")
+A3<-read.ply(curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A3.ply"))
+```
+
+
+```{r load Morpho, eval=F}
+library(Morpho)
+name<-file2mesh(file name)#using Morpho
+```
+
+### Selecting landmarks
+
+For geomorphometric analysis, we must first select landmarks on each of the specimens, which will serve as standardized points across which measurements and comparisons can be made. "digit.fixed" from the geomorph package is used for selecting fixed landmarks that do not change from specimen to specimen and "digit.curves" and "digitsurface" are tools for creating semi-landmarks along curves and surfaces which slide between the fixed landmarks. These sliding landmarks can also be defined from existing landmark data using "define.sliders". Thus, the geomorph package allows us to make comparison between specimens across the shapes of fixed points, curves and surfaces. In this tutorial, we will first define the fixed landmarks for three arrowheads, and create a template of surface semi-landmarks from A1 to calculate the surface landmarks of the other two arrowheads. 
+
+For curves with no defined landmarks, semi-landmarks that slide along the curve can be defined by digit.curves
+
+digitsurface can then be used to place equal spaced landmarks between those points to represent a surface, while digit.curve and define.sliders can be used to fit curves on the specimen (I haven't really figured out surface and curve yet)
+
+Use digit.fixed to selected fixed landmarks on the first specimen, this will save a ".nts" landmark file to the directory. You will use the console to confirm each point using y/n. Double right click to select the landmark **(windows, maybe different on Mac)**. This can be kind of troublesome. The easiest way is to orient the arrowhead as shown below, and double right click along the edge where the landmarks are highlighted. Note, you should click in the same order for each set of fixed landmarks so keep track of where you start. **INSERT IMAGE**
+
+**2**
+```{r}
+A1_fix<-digit.fixed(A1, 8)#number of fixed landmarks to create
+```
+```{r}
+plotspec(A1, A1_fix)#these may not overlap
+```
+**3** Build template
+```{r}
+A1_temp<-buildtemplate(A1, A1_fix, 100, 1)
+```
+
+**4** edit template
+```{r}
+A1_temp_ed<-editTemplate(A1_temp, 8, 1)#remove an erroneus point
+```
+**5**Use template to create surface points from a new artiface
+```{r}
+digitsurface(A2, 8, 1, TRUE)
+```
+
+## Add n as many samples as you want in this step.
+```{r}
+library(curl)
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+f3 <- curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A2.ply")
+A3<-read.ply(curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A3.ply"))
+digitsurface(A3, 8, 1, TRUE)
+```
+
+
+
+```{r}
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+plotspec(A2, A2_fix, ptsize=5, centered=T)
+```
+
+
+```{r}
+A2_fix<- digit.fixed(A2, 8)#number of fixed landmarks to create
+```
+
+You can view the landmark and 3D models together using...
+
+
+
+### Loading exisiting landmark data
+You can also read in landmark data from another software. Here we will read in the nts file from A1. 
+
+```{r}
+A1_nts<-readland.nts("A1_MCC.nts")#I changed the name so they would not be overwritten
+```
+```{r}
+A2_nts<-readland.nts("A2_MCC.nts")#I changed the name so they would not be overwritten
+```
+Read the nts files in to create a 3D array. 
+```{r}
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+filelist<-(c("A1.nts", "A2.nts", "A3.nts"))
+filelist
+arrow_nts<-readmulti.nts(filelist)
+```
+
+Or bind the landmark files together into a 3d array for use in Geomorph using abind package. 
+```{r}
+require(abind)
+dim(A1_fix)
+arrow2<-abind(A1_fix, A2_fix, "A3_nts", along=3)
+dim(A1_A2_fix)
+```
+```{r}
+plot3d(A1_fix)
+```
+
+### Visualising landmarks
+
+We can now view all the landmarks together, these are unaligned.
+```{r}
+plotAllSpecimens(arrow_nts)
+str(A1_A2_nts)
+```
+
+```{r}
+plotAllSpecimens(A1_A2_fix)
+str(A1_A2_fix)
+```
+Note how the outlines of the artifacts are not aligned in the same space. 
+
+```{r}
+```
+
+### GPAGEN function
+This function performs a procrustes analysis to align the points into the same space. 
+
+We use the gpagen function to align the points
+```{r}
+GPA<-gpagen(arrow_nts)
+```
+```{r}
+str(GPA$coords)
+```
+
+```{r}
+plotAllSpecimens(GPA$coords)
+```
+```{r}
+plotTangentSpace(GPA$coords)
+```
+
+
+
+Visualizing differences in specimens
+
+
+
+```{r}
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+ref<-mshape(GPA$coords)
+plotRefToTarget(ref,GPA$coords[,,1],method="points")
+scallinks <- matrix(c(1,rep(2:8, each=2),1), nrow=8, byrow=TRUE)
+```
+```{r}
+plotRefToTarget(ref,GPA$coords[,,1],method="points", links = scallinks)
+scallinks <- matrix(c(1,rep(2:8, each=2),1), nrow=8, byrow=TRUE)
+```
+```{r}
+plotRefToTarget(ref,GPA$coords[,,3],gridPars=gridPar(tar.pt.bg = "red", tar.link.col="blue",
+tar.link.lwd=2), method="point", links = scallinks)
+```
+```{r}
+plotAllSpecimens(GPA$coords, links = scallinks)
+```
+
+
+```{r}
+plot(ref)
+```
+
+IMPORTING TPS BULK
+```{r}
+require(abind)
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+filelist <- list.files(pattern = ".tps")
+mydata <- NULL
+for(i in filelist){
+  tmp <- readland.tps(i)
+  mydata$coords <- abind(mydata$coords, tmp)
+  mydata$names <- rbind(mydata$names,cbind(dimnames(tmp)[[3]], i))
+}
+colnames(mydata$names) <- c("specimen", "file")
+```
+```{r}
+str(arrow_nts)
+```
+
+
+```{r}
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+slider<-define.sliders(arrow_nts, 3, T, T)
+
+```
+```{r}
+surf<-read.csv("surfslide.csv")
+arrow_list<-list(coords=arrow_nts, curv=slider, surf=surf)
+```
+
+
+```{r}
+GPA2<-gpagen(arrow_list$coords, curves = arrow_list$slider, surfaces = c(9:108))
+```
+
+```{r}
+plotAllSpecimens(GPA2$coords)
+```
+```{r}
+surf
+```
+```{r}
+scallops$curvslide
+scallops$surfslide
+```
+```{r}
+
+Y.gpa2 <- gpagen(A=scallops$coorddata, curves=scallops$curvslide, surfaces=scallops$surfslide)
+plot(Y.gpa2)
+```
+```{r}
+scallops$curvslide
+
+```
+
+```{r}
+curv<-digit.fixed(A1, 4)
+```
+
+```{r}
+dcurv<-digit.curves(curv[1,], curv, nPoints=9, F)
+```
+```{r}
+plotspec(A2, A2_fix)
+```
+
+```{r}
+slid<-define.sliders(curv, 3)
+```

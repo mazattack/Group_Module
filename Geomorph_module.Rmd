@@ -310,7 +310,7 @@ name<-file2mesh(file name)#using Morpho
 
 For geomorphometric analysis, we must first select landmarks on each of the specimens, which will serve as standardized points across which measurements and comparisons can be made. 
 
-digit.fixed is used for selecting fixed landmarks that do not change from specimen to specimen. digitsurface can then be used to place equal spaced landmarks between those points to represent a surface, while digit.curve can be used to fit curves on the specimen (I haven't really figured out surface and curve yet)
+digit.fixed is used for selecting fixed landmarks that do not change from specimen to specimen. digitsurface can then be used to place equal spaced landmarks between those points to represent a surface, while digit.curve and define.sliders can be used to fit curves on the specimen (I haven't really figured out surface and curve yet)
 
 Use digit.fixed to selected fixed landmarks on the specimen, this will save a nts landmark file to the directory. You will use the console to confirm each point using y/n. Double right click to select the landmark. 
 
@@ -378,7 +378,7 @@ Or bind the landmark files together into a 3d array for use in Geomorph using ab
 ```{r}
 require(abind)
 dim(A1_fix)
-A1_A2_fix<-abind(A1_fix, A2_fix, along=3)
+arrow2<-abind(A1_fix, A2_fix, "A3_nts", along=3)
 dim(A1_A2_fix)
 ```
 ```{r}
@@ -462,5 +462,39 @@ for(i in filelist){
 }
 colnames(mydata$names) <- c("specimen", "file")
 ```
+```{r}
+str(arrow_nts)
+```
 
+
+```{r}
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+slider<-define.sliders(arrow_nts, 3, T, T)
+
+```
+```{r}
+surf<-read.csv("surfslide.csv")
+arrow_list<-list(coords=arrow_nts, curv=slider, surf=surf)
+```
+
+
+```{r}
+GPA2<-gpagen(arrow_list$coords, curves = arrow_list$slider, surfaces = c(9:108))
+```
+
+```{r}
+plotAllSpecimens(GPA2$coords)
+```
+```{r}
+surf
+```
+```{r}
+scallops$curvslide
+scallops$surfslide
+```
+```{r}
+
+Y.gpa2 <- gpagen(A=scallops$coorddata, curves=scallops$curvslide, surfaces=scallops$surfslide)
+plot(Y.gpa2)
+```
 
