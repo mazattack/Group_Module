@@ -35,6 +35,15 @@ A3<-read.ply(curl("https://raw.githubusercontent.com/mazattack/Group_Module/mast
 ```
 
 We can inspect this data most simply using plot3d in the "rgl" package. This package is loaded by default when you load the geomorph package. 
+
+```{r cache=TRUE}
+plot3d(A1)
+```
+
+```{r}
+
+```
+
 ```{r load Morpho, eval=F}
 library(Morpho)
 name<-file2mesh(file name)#using Morpho
@@ -53,6 +62,7 @@ Use digit.fixed to selected fixed landmarks on the first specimen, this will sav
 **2**
 ```{r eval=FALSE}
 A1_fix<-digit.fixed(A1, 8)#mesh, number of fixed landmarks to create. If you need to measure the shape of a curve, add in landmarks along the curve to be converted to sliders later on. 
+A1_fix
 ```
 We can inspect these landmarks using plotspec to plot the landmarks you have just created on the 3D mesh.
 ```{r }
@@ -64,30 +74,80 @@ Now lets build a template using these fixed points, to create semi-landmarks ove
 **3** Build template
 ```{r eval=FALSE}
 A1_temp<-buildtemplate(A1, A1_fix, 50, ptsize=1) #mesh, file of landmark data, number of surface sliders to create, point size
+A1_temp
 ```
+
+
 Now let view our template. How well does it match our 3D specimen?
 ```{r}
-plotspec(A1, A1_temp)
+plotspec(A1, A1_temp, ptsize=5, centered=T)
 ```
+DEFINE CURVE SLIDERS HERE IF TIME ALLOWS
+
+
 If you need to edit the template you can use "editTemplate" to remove n points from the template.
 **4** edit template
 ```{r}
 A1_temp_ed<-editTemplate(template=A1_temp, fixed=8, n=1)#template, # of fixed points, number of points to be removed
 ```
 
-Finally, we can use that template to create a series of landmarks from the remainder of our sample. In "digitsurface" we can either use exisiting fixed landmarks from the specimen to align the semi-landmarks to the specimen, or create the landmarks directly within the function, the same way we did with "digit.fixed". Let's try out both ways here. Remember, the fixed landmarks must be in the same location and order in each specimen. 
+Finally, we can use that template to create a series of landmarks from the remainder of our sample. In "digitsurface" we can either use exisiting fixed landmarks from the specimen to align the semi-landmarks to the specimen, or create the landmarks directly within the function, the same way we did with "digit.fixed". Let's try out both ways here. Remember, the fixed landmarks must be in the same location and order in each specimen.
 
 **5**Use template to create surface points from a new artifact
 ```{r}
 digitsurface(spec=A2, fixed=8, ptsize=1, centered=TRUE)
 ```
 
-We can also run the digitsurface using exisiting landmark data. Let's use an nts file I created for A3. First read in the data. Since we are working with ".nts" files, we can use readland.nts to load the data. 
+We can also run the digitsurface using exisiting landmark data. Let's use an nts file I created for A3. First read in the data. Since we are working with ".nts" files, we can use readland.nts to load the data. *NEED TO PUT DATA HERE*
 
 ```{r}
-A3_nts<- 
+A3_nts<- readland.nts(curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A3.nts"))
 digitsurface(A3, A3_nts, 1, TRUE)
 ```
+ 
+Now that we have imported all our 3D models, loaded and created the fixed and semi-landmarks, we need to transform them into a format for geomorphometric analysis. When loading data from multiple landmark files of individual specimens, we can use "readmulti.nts" to combine filed into a 3D array for analysis. This is easiest if the file is in the working directory
+
+If you have a single .nts file with the landmarks of multiple speciments use readlands.nts to import.
+If you have mulitple .nts files with the landmarks of a single specimen use readmulti.nts
+To import multiple .nts files with multiple specimens or multiple .tps files, you can use the funtion below, specifying 'patterns = ".nts" or ".tps"' and 'tmp <- "readland.tps" or "readland.nts"' as appropriate.
+
+First you must create a filelist containing an array of the file names you will import.
+```{r}
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+filelist <- list.files(pattern = ".nts")#This will search the working directory (default) for the files containing .nts
+filelist
+```
+
+To import multiple tps files, there is no option to import them as a group, so we need to use a loop function. The following function uses .nts files so you can see how the function works. Simply replace the two ".nts" sections with ".tps". 
+
+IMPORTING TPS BULK
+```{r}
+require(abind)
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+filelist <- list.files(pattern = ".tps")
+mydata <- NULL
+for(i in filelist){
+  tmp <- readland.tps(i)
+  mydata$coords <- abind(mydata$coords, tmp)
+  mydata$names <- rbind(mydata$names,cbind(dimnames(tmp)[[3]], i))
+}
+colnames(mydata$names) <- c("specimen", "file")
+```
+
+Here we will use readmulti.nts to load the three .nts files we created containing the fixed and semi-fixed landmarks. 
+```{r}
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+arrow_nts<-readmulti.nts(filelist)
+head(arrow_nts)
+```
+We can view the landmark data all together using plotAllspecimens
+```{r}
+plotAllSpecimens(arrow_nts)
+```
+
+You'll notice that the arrowhead landmarks are not aligned to one another. For this, we need to use a function that with align the models based on the landmarks we selected. 
+
+
 
 ## Add n as many samples as you want in this step.
 ```{r}
@@ -130,6 +190,9 @@ filelist<-(c("A1.nts", "A2.nts", "A3.nts"))
 filelist
 arrow_nts<-readmulti.nts(filelist)
 ```
+
+
+
 
 Or bind the landmark files together into a 3d array for use in Geomorph using abind package. 
 ```{r}
