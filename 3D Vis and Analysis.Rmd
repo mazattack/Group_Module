@@ -9,6 +9,9 @@ output:
     toc_float: true
 ---
 
+```{r, echo =FALSE}
+knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
+```
 # Welcome, friends! 
 
 Please go forth and scroll down to begin your journey though our group module assignment for AN 597. Our topic is "3D visualization and analysis".  
@@ -833,16 +836,8 @@ Example for 3D data:
 
 ```
 
-
-```{r, echo =FALSE}
-knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
-```
-
-Note: macs need XQuartz installed. See the modules from Week 1 for instructions.
-#Working with 3D data TITLE
-
-#Geometric morphometric analysis in R
-
+#Geometric morphometric analysis in R with 3D data
+![](./Images/geomorph_skull.png)
 ###NOTE: Many of these functions require feedback in the console or in a popup window, so they will not show in the knitted html. Additionally, the size of the mesh files and other 3D data means that the graphical output of many of these functions cannot be displayed in the html output.
 
 Geometric morphometrics is a technique used to quantify and analyze patterns in shapes across 2D and 3D specimens. For example, using morphometrics, you could quantify differences in the shape of a specific feature, say, the wing of an insect, within and across multiple species. In this tutorial, you will learn how to import and create landmark data in R for morphometric analysis using the package Geomorph. The geomorph package allows us to make comparisons between specimens across the shapes of fixed points, curves and surfaces.
@@ -856,6 +851,8 @@ library(curl)
 library(knitr)
 library(rgl)
 ```
+###Note: macs also need XQuartz installed. See the modules from Week 1 for instructions.
+
 ##Importing 3D data
 
 The Geomorph package allows you to input 3D data in ASCII ".ply" format which is a **common output from 3D scanners and 3D software packages**. Here you will load three 3D scans of archaeological arrow heads from an online repository of 3D models [âsketchfabâ](https://sketchfab.com/demoon/collections/ref_weapon_neolit)
