@@ -833,3 +833,328 @@ Example for 3D data:
 
 ```
 
+
+```{r, echo =FALSE}
+knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
+```
+
+Note: macs need XQuartz installed. See the modules from Week 1 for instructions.
+#Working with 3D data TITLE
+
+#Geometric morphometric analysis in R
+
+###NOTE: Many of these functions require feedback in the console or in a popup window, so they will not show in the knitted html. Additionally, the size of the mesh files and other 3D data means that the graphical output of many of these functions cannot be displayed in the html output.
+
+Geometric morphometrics is a technique used to quantify and analyze patterns in shapes across 2D and 3D specimens. For example, using morphometrics, you could quantify differences in the shape of a specific feature, say, the wing of an insect, within and across multiple species. In this tutorial, you will learn how to import and create landmark data in R for morphometric analysis using the package Geomorph. The geomorph package allows us to make comparisons between specimens across the shapes of fixed points, curves and surfaces.
+
+###Packages used in this section
+```{r load packages}
+library(geomorph)
+library(Morpho)
+library(abind)
+library(curl)
+library(knitr)
+library(rgl)
+```
+##Importing 3D data
+
+The Geomorph package allows you to input 3D data in ASCII ".ply" format which is a **common output from 3D scanners and 3D software packages**. Here you will load three 3D scans of archaeological arrow heads from an online repository of 3D models [âsketchfabâ](https://sketchfab.com/demoon/collections/ref_weapon_neolit)
+
+Note: this may take a couple of minutes
+```{r load}
+library(curl)
+library(geomorph)
+f1 <- curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A1.ply")
+A1<-read.ply(f1) #using Geomorph
+A2<-read.ply(curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A2.ply"))
+A3<-read.ply(curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A3.ply"))
+```
+
+We can inspect this data most simply using plot3d in the "rgl" package. This package is loaded by default when you load the geomorph package. 
+
+```{r}
+plot3d(A1) #Run in R to view in 3D
+```
+To import 3D data in binary ".ply" format, you can use the Morpho package.
+```{r eval=FALSE}
+library(Morpho)
+name<-file2mesh((curl("https://raw.githubusercontent.com/mazattack/Group_Module/master/Data/A2.ply")))#using Morpho
+```
+
+## Selecting landmarks
+
+For geomorphometric analysis, we must first select landmarks on each of the specimens which will serve as standardized points, across which measurements and comparisons can be made. "digit.fixed" from the geomorph package is used for selecting fixed landmarks that do not change from specimen to specimen, and "digit.curves" and "digitsurface" are tools for creating semi-landmarks along curves and surfaces which slide between the fixed landmarks. These sliding landmarks can also be defined from existing landmark data using "define.sliders". In this tutorial, we will first define the fixed landmarks for three arrowheads, and create a template of surface semi-landmarks from A1 to calculate the surface landmarks of the other two arrowheads. 
+
+Use digit.fixed to selected fixed landmarks on the first specimen, this will save a ".nts" landmark file to the directory. You will use the console to confirm each point using y/n. Double right click to select the landmark *(this works in windows, examine the help file for the function for specific instructions on how to correctly select landmarks using a MAC)*. This can be kind of troublesome. The easiest way is to orient the arrowhead as shown below, and double right click along the edge where the landmarks are highlighted. You should click in the same order for each set of fixed landmarks so keep track of where you start. **Note: for this tutorial, start at the tip of the arrow and select in e clockwise order**.
+
+```{r eval=FALSE}
+A1_fix<-digit.fixed(A1, 10)#mesh, number of fixed landmarks to create. If you need to measure the shape of a curve, add in landmarks along the curve to be converted to sliders later on. 
+A1_fix #run in R to see output
+```
+```{r echo=FALSE, results="hide"}
+wd<-getwd()
+setwd("./Digit")
+A1_nts<-readmulti.nts(c("A1_digit.nts"))
+setwd(wd)
+```
+![Select landmarks for A1:start at the tip and work clockwise](./Images/A1_digit.png)
+
+We can inspect these landmarks using plotspec to plot the landmarks you have just created on the 3D mesh.
+```{r eval=FALSE}
+plotspec(A1, A1_fix, centered=TRUE)#these may not overlap unless you specify centered = TRUE
+```
+```{r echo=FALSE}
+plotspec(A1, A1_nts[,,1], centered=TRUE, ptsize=1)#I found the output below nicer to work with, but cannot be run from knitr
+#rglwidget() crashes R
+```
+You can now find the A1.nts file in your working directory, this file will be overwritten each time you run digit.fixed on the same specimen, so remember to make a copy if you want to test different landmark points. 
+
+Let's load that landmark file and compare the first sheet of this 3D matrix to the A1_fix created above.
+```{r eval=FALSE}
+A1_nts<-readmulti.nts(c("A1.nts"))#file must be located in working directory
+A1_nts[,,1]
+```
+```{r echo=FALSE}
+A1_nts[,,1]
+```
+In order to use the landmark data directly in functions like plotspec, we must reference the first sheet of data, even if only one specimen is listed in the data set.
+```{r}
+plotspec(A1, A1_nts[,,1], centered=TRUE, ptsize=1)
+#rglwidget() does not work here
+```
+
+## Build template
+Now lets build a template using these fixed points, to create semi-landmarks over the surface of the model. This template will be used to create surface sliders for the remaining specimens. "buildtemplate" will overwrite your .nts files with your new landmark data, as well as create a "surfslide.csv" file in the working directory, which codes which landmarks are the surface sliders, and a template.txt which provides the xyz coordinates for the sliders.
+
+```{r eval=FALSE}
+A1_temp<-buildtemplate(A1, A1_fix, 50, ptsize=1) #mesh, file of landmark data, number of surface sliders to create, point size
+A1_temp
+```
+```{r echo=FALSE}
+A1_temp<-buildtemplate(A1, A1_nts[,,1], 50, 1, TRUE)
+A1_temp
+```
+Now let view our template. How well does it match our 3D specimen?
+```{r eval=FALSE}
+plotspec(A1, A1_temp, ptsize=5, centered=T)#run in R studio for output
+```
+
+If you need to edit the template you can use "editTemplate" to remove n points from the template.
+
+```{r eval=FALSE}
+A1_temp_ed<-editTemplate(template=A1_temp, fixed=8, n=1)#template, # of fixed points, number of points to be removed
+```
+
+##Create semi-landmarks
+Finally, we can use that template to create a series of landmarks for the remainder of our sample. In "digitsurface" we can either use existing landmark data for that specimen to align the semi-landmarks across the surface of the specimen, or create the landmarks directly within the function, the same way we did with "digit.fixed". Let's try out both ways here. Remember, the fixed landmarks must be in the same location and order in each specimen. This function will also read in the template data in the working directory to assign the landmarks.
+
+```{r eval=FALSE}
+digitsurface(spec=A2, fixed=10, ptsize=1, centered=TRUE)
+```
+```{r echo=FALSE, results="hide"}
+wd<-getwd()
+setwd("./Digit")
+A2_nts<-readmulti.nts(c("A2_digit.nts"))
+setwd(wd)
+```
+
+```{r echo=FALSE}
+digitsurface(A2, A2_nts[,,1], 1, TRUE)
+```
+
+We can also run the digitsurface using existing landmark data. Let's use an nts file I created for A3. First read in the data. Since we are working with ".nts" files, we can use readmulti.nts to load the data.  
+#UPDATE FINAL Download the landmark file A3.nts from https://github.com/mazattack/Group_Module/tree/master/Data and place it in your working directory. Reminder, to see your working directory, use getwd().
+
+```{r echo=FALSE, results="hide"}
+wd<-getwd()
+setwd("./Digit")
+A3_nts<-readmulti.nts(c("A3_digit.nts"))
+setwd(wd)
+```
+
+```{r eval=FALSE, results="hide"}
+A3_nts<- readmulti.nts(c("A3_digit.nts"))
+digitsurface(A3, A3_nts[,,1], 1, TRUE)
+```
+```{r echo=FALSE}
+digitsurface(A3, A3_nts[,,1], 1, TRUE)
+```
+Finally, because two of our initial fixed landmarks fall along a curve with no distinguishing features, we should define them as sliders too. We must select the landmark at the start of the curve, the slider and the landmark at the end of the curve. In the following function, select landmarks 3, 2, 1, and 1, 10, 9. NOTE: that usually, you would want to place many more landmarks along a curve, and they should be defined as overlapping sliding landmarks, i.e. 1, 2, 3 and 2, 3, 4, and 3, 4, 5.
+![Select sliders: start, slider, finish, i.e. 3, 2, 1](./Images/define_sliders.png)
+
+```{r eval=FALSE}
+sliders<-define.sliders(landmarks=A1_temp, nsliders=2, surfsliders = TRUE, write.file = TRUE)
+```
+```{r echo=FALSE}
+wd<-getwd()
+setwd("./Curve")
+sliders<-as.matrix(read.csv("curveslide.csv"))
+setwd(wd)
+```
+
+```{r}
+sliders
+```
+Now that we have imported all our 3D models, loaded and created the fixed and semi-landmarks, we need to transform them into a format for geomorphometric analysis. The easiest way to do this is load the raw landmark data into a 3D array.
+
+##Importing landmark data
+
+  If you have a single .nts file with the landmarks of multiple specimens use readlands.nts to import. 
+
+  If you have multiple .nts files with the landmarks of a single specimen use readmulti.nts. 
+
+First you must create a filelist containing an array of the file names you will import.
+```{r eval=FALSE}
+filelist <- list.files(pattern = ".nts")#This will search the working directory (default) for the files containing .nts
+filelist
+```
+```{r echo=FALSE, results="hide"}
+setwd("./Surface")
+filelist <- list.files(pattern = ".nts")#This will search the working directory (default) for the files containing .nts
+arrow_nts<-readmulti.nts(filelist)
+setwd(wd)
+```
+
+Here we will use readmulti.nts to load the three .nts files we created containing the fixed and semi-fixed landmarks. The number of landmarks in each file must be identical.
+```{r eval=FALSE}
+arrow_nts<-readmulti.nts(filelist)
+str(arrow_nts)
+arrow_nts #note how the data is formatted
+```
+```{r echo=FALSE}
+str(arrow_nts)
+arrow_nts #note how the data is formatted
+```
+###Importing .nts/.tps in bulk
+To import multiple .nts files with multiple specimens or multiple .tps files, you can use the function below. Simply replace the two ".nts" sections with ".tps". 
+
+```{r eval=FALSE}
+require(abind)
+filelist <- list.files(pattern = ".nts") #this will list files in the wd, use "path=" to specify files in another location
+mydata <- NULL
+for(i in filelist){
+  tmp <- readland.nts(i)
+  mydata$coords <- abind(mydata$coords, tmp)
+  mydata$names <- rbind(mydata$names,cbind(dimnames(tmp)[[3]], i))
+}
+colnames(mydata$names) <- c("file") #If the file specifies species ID, I think this should be c("specimen", "file")
+```
+Note: There are more variables to specify with .tps, including species ID names and curve data. See the help file for more info. 
+
+##Viewing landmark data
+We can view the landmark data all together using plotAllspecimens
+```{r eval=1}
+plotAllSpecimens(arrow_nts)
+rglwidget()
+```
+
+You'll notice that the arrowhead landmarks are not aligned to one another. For this, we need to use a function that with align the models based on the landmarks we selected. 
+
+## GPAGEN function
+Generalized Procrustes Analysis (GPA) is a common statistical analysis for quantifying and comparing the shape of objects. The gpagen function aligns and superimposes the landmark data and calculates the mean shape of those objects combined. The output of the gpagen is the primary data set for subsequent analyses and statistical tests that describe the shape of the objects.
+```{r}
+GPA<-gpagen(arrow_nts, curves=sliders, surfaces = 11:60)#11:60 are the numbers assigned to the landmarks we created with digit.surf, the first 10 are fixed, and we created 50 semi-landmarks 11:60
+```
+If we examine GPA output in the console, it will provide us info about what analyses was run, the dimensions of the model, and the mean coordinates of the landmarks across our specimens. Note summary(GPA) provides the same output. View (GPA) provides an overview of what is in our list.
+
+```{r}
+summary(GPA)
+```
+You can also view in RStudio with
+```{r eval=FALSE}
+View(GPA)
+```
+Inspect the different data sets attached to GPA and read their descriptions below. 
+
+*coords*	
+A (p x k x n) array of aligned Procrustes coordinates, where p is the number of landmark points, k is the number of landmark dimensions (2 or 3), and n is the number of specimens. The third dimension of this array contains names for each specimen if specified in the original input array.
+*Csize*	
+A vector of centroid sizes for each specimen, containing the names for each specimen if specified in the original input array.
+*iter*	
+The number of GPA iterations until convergence was found (or GPA halted).
+*points.VCV*	
+Variance-covariance matrix among landmark coordinates.
+*points.var*	
+Variances of landmark points.
+*consnsus*	
+The consensus (mean) configuration.
+*p*	
+Number of landmarks.
+*k*
+Number of landmark dimensions.
+*nsliders*	
+Number of semilandmarks along curves.
+*nsurf*	
+Number of semilandmarks as surface points.
+*data*	
+Data frame with an n x (pk) matrix of Procrustes residuals and centroid size.
+*Q*	
+Final convergence criterion value.
+*slide.method*	
+Method used to slide semilandmarks.
+*call*	
+The match call.
+
+### Plot aligned landmarks
+For our purposes, the most important part of the GPA list is the $coords data, the coordinates of the aligned landmark data for each specimen.
+
+Let's plot GPA to see our aligned landmark data (in grey) and the mean shape of the arrowheads (in black).
+```{r, echo=1}
+plotAllSpecimens(GPA$coords)
+rglwidget()
+```
+To see the mean shape more clearly, we can define the links between the points using a matrix which defines the order to link the points together. 
+```{r}
+alinks <- matrix(c(1,rep(2:10, each=2),1), nrow=10, byrow=TRUE) #we have 10 landmarks. for an example with "n" landmarks, change both "10" to "n". 
+alinks
+```
+```{r}
+plotAllSpecimens(GPA$coords, links=alinks)
+```
+To view the mean shape created by gpagen, we can use the function mshape
+```{r}
+library(geomorph)
+meanarrow<-mshape(GPA$coords)
+```
+```{r}
+plot(meanarrow)
+```
+
+###Visualizing differences in shape
+To visualize the differences between the specimens and the mean, we can use the function plotRefToTarget, with M1 as the reference specimen and M2 as the target specimen. 
+```{r eval=FALSE}
+plotRefToTarget(M1=meanarrow,M2=GPA$coords[,,1],method="points") #M2 here is the first specimen A1
+```
+```{r echo=FALSE}
+plotRefToTarget(M1=meanarrow,M2=GPA$coords[,,1],method="points") #M2 here is the first specimen A1
+rglwidget()
+```
+If we add our alinks for the outline, we can add an outline of the target (black) and reference (gray) shape to the plot. 
+
+```{r eval=FALSE}
+plotRefToTarget(meanarrow,GPA$coords[,,1],method="points", links = alinks)
+```
+```{r echo=FALSE}
+plotRefToTarget(meanarrow,GPA$coords[,,1],method="points", links = alinks)
+rglwidget()
+```
+In this next example, the target points are colored red, and their links are blue. Target=A3, Ref=Mean shape
+```{r eval=FALSE}
+plotRefToTarget(meanarrow,GPA$coords[,,3],gridPars=gridPar(tar.pt.bg = "red", tar.link.col="blue",
+tar.link.lwd=2), method="point", links = alinks)
+```
+```{r echo=FALSE}
+plotRefToTarget(meanarrow,GPA$coords[,,3],gridPars=gridPar(tar.pt.bg = "red", tar.link.col="blue",
+tar.link.lwd=2), method="point", links = alinks)
+rglwidget()
+```
+We can also compare across two specimens. Target=A1, Ref=A3
+```{r eval=FALSE}
+plotRefToTarget(GPA$coords[,,3], method="point", GPA$coords[,,1],links = alinks)
+```
+```{r echo=FALSE}
+plotRefToTarget(GPA$coords[,,3], method="point", GPA$coords[,,1],links = alinks)
+rglwidget()
+```
+
+
