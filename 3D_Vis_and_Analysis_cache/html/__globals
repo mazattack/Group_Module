@@ -50,3 +50,38 @@ unnamed-chunk-50
 unnamed-chunk-51	
 unnamed-chunk-52	
 load packages	library	geomorph	Morpho	abind	curl	knitr	rgl
+load	library	curl	geomorph	f1	A1	read.ply	A2	A3
+unnamed-chunk-53	plot3d	A1
+unnamed-chunk-54	library	Morpho	name	file2mesh	curl
+unnamed-chunk-55	A1_fix	digit.fixed	A1
+unnamed-chunk-56	wd	getwd	setwd	A1_nts	readmulti.nts	c
+unnamed-chunk-57	plotspec	A1	A1_fix
+unnamed-chunk-58	plotspec	A1	A1_nts
+unnamed-chunk-59	A1_nts	readmulti.nts	c
+unnamed-chunk-60	A1_nts
+unnamed-chunk-61	plotspec	A1	A1_nts
+unnamed-chunk-62	A1_temp	buildtemplate	A1	A1_fix
+unnamed-chunk-63	A1_temp	buildtemplate	A1	A1_nts
+unnamed-chunk-64	plotspec	A1	A1_temp	T
+unnamed-chunk-65	A1_temp_ed	editTemplate	A1_temp
+unnamed-chunk-66	digitsurface	A2
+unnamed-chunk-67	wd	getwd	setwd	A2_nts	readmulti.nts	c
+unnamed-chunk-68	digitsurface	A2	A2_nts
+unnamed-chunk-69	wd	getwd	setwd	A3_nts	readmulti.nts	c
+unnamed-chunk-70	A3_nts	readmulti.nts	c	digitsurface	A3
+unnamed-chunk-71	digitsurface	A3	A3_nts
+unnamed-chunk-72	sliders	define.sliders	A1_temp
+unnamed-chunk-73	wd	getwd	setwd	sliders	as.matrix	read.csv
+unnamed-chunk-74	sliders
+unnamed-chunk-75	filelist	list.files
+unnamed-chunk-76	setwd	filelist	list.files	arrow_nts	readmulti.nts	wd
+unnamed-chunk-77	arrow_nts	readmulti.nts	filelist	str
+unnamed-chunk-78	str	arrow_nts
+unnamed-chunk-79	require	abind	filelist	list.files	mydata	i	tmp	readland.nts	coords	names	rbind	cbind	dimnames	colnames	c
+unnamed-chunk-80	plotAllSpecimens	arrow_nts
+unnamed-chunk-81	GPA	gpagen	arrow_nts	sliders
+unnamed-chunk-82	summary	GPA
+unnamed-chunk-83	View	GPA
+unnamed-chunk-84	plotAllSpecimens	GPA	coords	rglwidget
+unnamed-chunk-85	alinks	matrix	c	rep
+unnamed-chunk-86	plotAllSpecimens	GPA	coords	alinks
