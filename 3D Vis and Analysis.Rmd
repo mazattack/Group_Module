@@ -955,7 +955,7 @@ A2_nts<-readmulti.nts(c("A2_digit.nts"))
 setwd(wd)
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, results="hide"}
 digitsurface(A2, A2_nts[,,1], 1, TRUE)
 ```
 
@@ -973,7 +973,7 @@ setwd(wd)
 A3_nts<- readmulti.nts(c("A3_digit.nts"))
 digitsurface(A3, A3_nts[,,1], 1, TRUE)
 ```
-```{r echo=FALSE}
+```{r echo=FALSE, results="hide"}
 digitsurface(A3, A3_nts[,,1], 1, TRUE)
 ```
 Finally, because two of our initial fixed landmarks fall along a curve with no distinguishing features, we should define them as sliders too. We must select the landmark at the start of the curve, the slider and the landmark at the end of the curve. In the following function, select landmarks 3, 2, 1, and 1, 10, 9. NOTE: that usually, you would want to place many more landmarks along a curve, and they should be defined as overlapping sliding landmarks, i.e. 1, 2, 3 and 2, 3, 4, and 3, 4, 5.

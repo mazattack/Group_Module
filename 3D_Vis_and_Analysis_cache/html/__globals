@@ -85,3 +85,13 @@ unnamed-chunk-83	View	GPA
 unnamed-chunk-84	plotAllSpecimens	GPA	coords	rglwidget
 unnamed-chunk-85	alinks	matrix	c	rep
 unnamed-chunk-86	plotAllSpecimens	GPA	coords	alinks
+unnamed-chunk-87	library	geomorph	meanarrow	mshape	GPA	coords
+unnamed-chunk-88	plot	meanarrow
+unnamed-chunk-89	plotRefToTarget	meanarrow	GPA	coords
+unnamed-chunk-90	plotRefToTarget	meanarrow	GPA	coords	rglwidget
+unnamed-chunk-91	plotRefToTarget	meanarrow	GPA	coords	alinks
+unnamed-chunk-92	plotRefToTarget	meanarrow	GPA	coords	alinks	rglwidget
+unnamed-chunk-93	plotRefToTarget	meanarrow	GPA	coords	gridPar	alinks
+unnamed-chunk-94	plotRefToTarget	meanarrow	GPA	coords	gridPar	alinks	rglwidget
+unnamed-chunk-95	plotRefToTarget	GPA	coords	alinks
+unnamed-chunk-96	plotRefToTarget	GPA	coords	alinks	rglwidget
