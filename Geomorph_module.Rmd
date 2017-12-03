@@ -262,7 +262,7 @@ txt.pos=3, txt.cex=1))
 Example for 3D data: 
 
 ```{r}
-library(geomorph)
+
 data(scallops)
 Y.gpa <- gpagen(A=scallops$coorddata, curves=scallops$curvslide,
 surfaces=scallops$surfslide, print.progress = FALSE)
@@ -271,7 +271,6 @@ plotAllSpecimens(Y.gpa$coords,links=scallinks,
 plot.param= list(pt.bg = "blue",link.col="red"))
 
 ```
-
 
 
 #Working with 3D data
@@ -311,7 +310,9 @@ name<-file2mesh(file name)#using Morpho
 
 For geomorphometric analysis, we must first select landmarks on each of the specimens, which will serve as standardized points across which measurements and comparisons can be made. 
 
-digit.fixed is used for selecting fixed landmarks that do not change from specimen to specimen. digitsurface can then be used to place equal spaced landmarks between those points to represent a surface, while digit.curve and define.sliders can be used to fit curves on the specimen (I haven't really figured out surface and curve yet)
+digit.fixed is used for selecting fixed landmarks that do not change from specimen to specimen. For curves with no defined landmarks, semi-landmarks that slide along the curve can be defined by digit.curves
+
+digitsurface can then be used to place equal spaced landmarks between those points to represent a surface, while digit.curve and define.sliders can be used to fit curves on the specimen (I haven't really figured out surface and curve yet)
 
 Use digit.fixed to selected fixed landmarks on the specimen, this will save a nts landmark file to the directory. You will use the console to confirm each point using y/n. Double right click to select the landmark. 
 
@@ -321,7 +322,7 @@ Note: this is kind of annoying, it is hard to orient, and doesn't seem to select
 A1_fix<-digit.fixed(A1, 8)#number of fixed landmarks to create
 ```
 ```{r}
-plotspec(A1, A1_fix)#these may not overlap
+plotspec(A1, A1_fix, centered = TRUE)#these may not overlap
 ```
 **3** Build template
 ```{r}
@@ -351,7 +352,7 @@ digitsurface(A3, 8, 1, TRUE)
 
 
 ```{r}
-A2_fix<- digit.fixed(A2, 10)#number of fixed landmarks to create
+A2_fix<- digit.fixed(A2, 8)#number of fixed landmarks to create
 ```
 
 You can view the landmark and 3D models together using...
@@ -362,14 +363,14 @@ You can view the landmark and 3D models together using...
 You can also read in landmark data from another software. Here we will read in the nts file from A1. 
 
 ```{r}
-getwd()
-A1_nts<-readland.nts("A1.nts")#I changed the name so they would not be overwritten
+A1_nts<-readland.nts("A1_MCC.nts")#I changed the name so they would not be overwritten
 ```
 ```{r}
 A2_nts<-readland.nts("A2_MCC.nts")#I changed the name so they would not be overwritten
 ```
 Read the nts files in to create a 3D array. 
 ```{r}
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
 filelist<-(c("A1.nts", "A2.nts", "A3.nts"))
 filelist
 arrow_nts<-readmulti.nts(filelist)
@@ -428,6 +429,7 @@ Visualizing differences in specimens
 
 
 ```{r}
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
 ref<-mshape(GPA$coords)
 plotRefToTarget(ref,GPA$coords[,,1],method="points")
 scallinks <- matrix(c(1,rep(2:8, each=2),1), nrow=8, byrow=TRUE)
@@ -438,7 +440,7 @@ scallinks <- matrix(c(1,rep(2:8, each=2),1), nrow=8, byrow=TRUE)
 ```
 ```{r}
 plotRefToTarget(ref,GPA$coords[,,3],gridPars=gridPar(tar.pt.bg = "red", tar.link.col="blue",
-tar.link.lwd=2), method="vector", links = scallinks)
+tar.link.lwd=2), method="point", links = scallinks)
 ```
 ```{r}
 plotAllSpecimens(GPA$coords, links = scallinks)
@@ -452,11 +454,11 @@ plot(ref)
 IMPORTING TPS BULK
 ```{r}
 require(abind)
-#setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
-filelist <- list.files(pattern = ".nts")
+setwd("C:/Users/Maria/Documents/GitHub/Group_Module")
+filelist <- list.files(pattern = ".tps")
 mydata <- NULL
 for(i in filelist){
-  tmp <- readland.nts(i)
+  tmp <- readland.tps(i)
   mydata$coords <- abind(mydata$coords, tmp)
   mydata$names <- rbind(mydata$names,cbind(dimnames(tmp)[[3]], i))
 }
@@ -497,24 +499,28 @@ scallops$surfslide
 Y.gpa2 <- gpagen(A=scallops$coorddata, curves=scallops$curvslide, surfaces=scallops$surfslide)
 plot(Y.gpa2)
 ```
-
 ```{r}
-define.sliders(A1_nts, 2, surfsliders=T, write.file=T)
-```
-```{r}
-plotspec(A1_nts, slide)
-```
-
-```{r}
-require(Morpho)
-
-```
-```{r}
-sl<-slider3d(slide, point="p")
+scallops$curvslide
 
 ```
 
 ```{r}
-head(mydata)
+curv<-digit.fixed(A1, 4)
+```
+
+```{r}
+dcurv<-digit.curves(curv[1,], curv, nPoints=9, F)
+```
+```{r}
+plotspec(A1, dcurv)
+```
+
+```{r}
+slid<-define.sliders(curv, 3)
+```
+
+```{r}
+slid
+dcurv
 ```
 
