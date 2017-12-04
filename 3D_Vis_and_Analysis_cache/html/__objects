@@ -9,92 +9,92 @@ unnamed-chunk-9
 unnamed-chunk-10	
 unnamed-chunk-11	
 unnamed-chunk-12	
-unnamed-chunk-13	pet.l	sep.l	sep.w	x	y	z
-unnamed-chunk-14	widget
-unnamed-chunk-15	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-15_e758f17ca602c3b8004aa44570f73fec_meta
-unnamed-chunk-16	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-16_135265f463f80b02ab100b5da6fb0f2b_meta
-unnamed-chunk-17	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-17_43cdb0a387f247b330d18d1030c42581_meta
-unnamed-chunk-18	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-18_82c42ed8ca2578f57a48aacb1def26ba_meta
-unnamed-chunk-19	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-19_3dbb80d873a3ce20c72d2f3d4c130712_meta
-unnamed-chunk-20	
-unnamed-chunk-21	
-unnamed-chunk-22	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-22_7e3ccdc8b774aed3ac826ea4dc0a308d_meta
-unnamed-chunk-23	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-23_780b000af826b5b1fe2d9fce8bc21d23_meta
-unnamed-chunk-24	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-24_c0247eb7c3c63f543c6341681fad3644_meta
-unnamed-chunk-25	x1	y1	z1
-unnamed-chunk-26	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-26_c0d8e6a05b82831914efbae7c1ba37f9_meta
-unnamed-chunk-27	lim
-unnamed-chunk-28	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-28_9e091bbfa29b368556b39077321e7c90_meta
-unnamed-chunk-29	lat	long
-unnamed-chunk-30	r	x	y	z
-unnamed-chunk-31	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-31_6dc81a0cebd5595e4bb7d308f3116546_meta
-unnamed-chunk-32	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-32_92fd1e6b50f7ab517de8a0a7bedab1b2_meta
-unnamed-chunk-33	
-unnamed-chunk-34	
+unnamed-chunk-13	
+unnamed-chunk-14	
+unnamed-chunk-15	pet.l	sep.l	sep.w	x	y	z
+unnamed-chunk-16	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-16_f912153c715fcdde4e8f6aade9633785_meta
+unnamed-chunk-17	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-17_dd702343484edebc1c0b0d8d7554419e_meta
+unnamed-chunk-18	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-18_2a35990cb206e76159b5e9221e4a311f_meta
+unnamed-chunk-19	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-19_0516901f99a069dc1218944877d99b55_meta
+unnamed-chunk-20	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-20_29e8fa9659869414f6eddaae55c4a087_meta
+unnamed-chunk-21	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-21_00db9ac4a724e05f289ca333470f9944_meta
+unnamed-chunk-22	
+unnamed-chunk-23	
+unnamed-chunk-24	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-24_a120bcea3401635cc8636bdfd9d31774_meta
+unnamed-chunk-25	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-25_8a9ad0193840c63e745984610e28ef6e_meta
+unnamed-chunk-26	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-26_ece0c6ee94125b8ae8d2ae98d6871d5e_meta
+unnamed-chunk-27	x1	y1	z1
+unnamed-chunk-28	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-28_b92199b6d9e0730e197ae20a75e91168_meta
+unnamed-chunk-29	lim
+unnamed-chunk-30	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-30_8cc4e9ea783a0ea22fd591411e217b39_meta
+unnamed-chunk-31	lat	long
+unnamed-chunk-32	r	x	y	z
+unnamed-chunk-33	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-33_6f6eafa0b2c21e5b5ed2d488a297ae86_meta
+unnamed-chunk-34	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-34_86f5fb49bcc2daf076e8be081cd17792_meta
 unnamed-chunk-35	
-unnamed-chunk-36	hist	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-36_e7ed0b51e6694df7d5a6fa7121f3c35b_meta
-unnamed-chunk-37	box_plot	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-37_d27f0d8ac9ff5a46211065897f021ac6_meta
-unnamed-chunk-38	scatter_plot1	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-38_6ddef4bb5b48f8da1abf14b5f5613e9f_meta
-unnamed-chunk-39	scatter_plot2	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-39_5fd04053af697c4f6544ee432ed2f8e1_meta
-unnamed-chunk-40	scatter_plot3	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-40_4a5f9a9ab50cbec845225a3a03a073e9_meta
-unnamed-chunk-41	scatter_plot4	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-41_22fc4e8eae98c41bdd942ab559ca466a_meta
-unnamed-chunk-42	
-unnamed-chunk-43	time_series	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-43_5a1e4070c9b78a640c3aa58c1587d650_meta
-unnamed-chunk-44	volcano
-unnamed-chunk-45	p	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-45_6d3276f36fd8e894f845c7f5230fe41e_meta
-unnamed-chunk-46	
-unnamed-chunk-47	countries	ICC_WC_T20	mapWorld	nation.x	nation.y	q	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-47_914c2b58456c90c3f58d9c431f95739d_meta	.GeocodedInformation	.GoogleGeocodeQueryCount
+unnamed-chunk-36	
+unnamed-chunk-37	
+unnamed-chunk-38	hist	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-38_a4c68cec3e77bf8f7514379ae41c5525_meta
+unnamed-chunk-39	box_plot	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-39_6dd75dc0127dd55b0e05f03e85bd725b_meta
+unnamed-chunk-40	scatter_plot1	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-40_cb3abfda1b1daa40c63620eb390d44b6_meta
+unnamed-chunk-41	scatter_plot2	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-41_872c2622c7a21a394dae4352ed4d6899_meta
+unnamed-chunk-42	scatter_plot3	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-42_14b947686eb0e93b8da6c2668d2b3ce2_meta
+unnamed-chunk-43	scatter_plot4	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-43_56a1faf48ca7ced8c3fd4c8e9b38377a_meta
+unnamed-chunk-44	
+unnamed-chunk-45	time_series	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-45_fd0db119cff126abcb6110ea0ade19d3_meta
+unnamed-chunk-46	volcano
+unnamed-chunk-47	p	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-47_e9a9ebcb63ce134b479229cab3b05789_meta
 unnamed-chunk-48	
-unnamed-chunk-49	
+unnamed-chunk-49	countries	ICC_WC_T20	mapWorld	nation.x	nation.y	q	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-49_b247254f7f6f0a17f740e6e22d000f11_meta	.GeocodedInformation	.GoogleGeocodeQueryCount
 unnamed-chunk-50	
-unnamed-chunk-51	A1_nts	wd
+unnamed-chunk-51	
 unnamed-chunk-52	
 load packages	
 load	A1	A2	A3	f1
-unnamed-chunk-53	
+unnamed-chunk-53	A1_nts	wd
 unnamed-chunk-54	
 unnamed-chunk-55	
 unnamed-chunk-56	
 unnamed-chunk-57	
-unnamed-chunk-58	A1_temp
+unnamed-chunk-58	
 unnamed-chunk-59	
-unnamed-chunk-60	
+unnamed-chunk-60	A1_temp
 unnamed-chunk-61	
-unnamed-chunk-62	A2_nts	wd
+unnamed-chunk-62	
 unnamed-chunk-63	
-unnamed-chunk-64	A3_nts	wd
+unnamed-chunk-64	A2_nts	wd
 unnamed-chunk-65	
-unnamed-chunk-66	
+unnamed-chunk-66	A3_nts	wd
 unnamed-chunk-67	
-unnamed-chunk-68	sliders	wd
+unnamed-chunk-68	
 unnamed-chunk-69	
-unnamed-chunk-70	
-unnamed-chunk-71	arrow_nts	filelist
+unnamed-chunk-70	sliders	wd
+unnamed-chunk-71	
 unnamed-chunk-72	
-unnamed-chunk-73	
+unnamed-chunk-73	arrow_nts	filelist
 unnamed-chunk-74	
 unnamed-chunk-75	
-unnamed-chunk-76	GPA
+unnamed-chunk-76	
 unnamed-chunk-77	
-unnamed-chunk-78	
-unnamed-chunk-79	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-79_6153217b54a923f140c69d692616fb5f_meta
-unnamed-chunk-80	alinks
-unnamed-chunk-81	
-unnamed-chunk-82	meanarrow
+unnamed-chunk-78	GPA
+unnamed-chunk-79	
+unnamed-chunk-80	
+unnamed-chunk-81	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-81_a4e6b90ef57ab33d2460e8a341996d12_meta
+unnamed-chunk-82	alinks
 unnamed-chunk-83	
-unnamed-chunk-84	
-unnamed-chunk-85	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-85_a45b34a80b841b61d78322a585a71cf6_meta
+unnamed-chunk-84	meanarrow
+unnamed-chunk-85	
 unnamed-chunk-86	
-unnamed-chunk-87	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-87_7cf6c1ff688019aa0644b83742661185_meta
+unnamed-chunk-87	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-87_912fd1b8bf2e90aacbf3b5be2eb61c32_meta
 unnamed-chunk-88	
-unnamed-chunk-89	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-89_b81d53e688f83c5bcb7030445df443d7_meta
+unnamed-chunk-89	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-89_3740eb94b47ef9989a967286ee7bd333_meta
 unnamed-chunk-90	
-unnamed-chunk-91	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-91_1e1ec2dcd966cbb937218f26c9ab9799_meta
+unnamed-chunk-91	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-91_82bad230606fe75c239b3e7d448cac2c_meta
 unnamed-chunk-92	
-unnamed-chunk-93	y
-unnamed-chunk-94	Y.gpa
-unnamed-chunk-95	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-95_fd0376e2cce76fdd0e108e3e1339469a_meta
-unnamed-chunk-96	
+unnamed-chunk-93	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-93_262f00c492e7a378381ea56dbd64b060_meta
+unnamed-chunk-94	
+unnamed-chunk-95	y
+unnamed-chunk-96	Y.gpa
 unnamed-chunk-1	
 setup2	Y.gpa	plethspecies
 unnamed-chunk-97	y

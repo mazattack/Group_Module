@@ -88,10 +88,16 @@ The scatterplot3d package is the "go-to" package for simple, non-interactive 3D 
 ```{r, eval=FALSE}
 install.packages("scatterplot3d") # Install
 ```
+<<<<<<< HEAD
+=======
+
+>>>>>>> 26c1a90b1f2c735fd9349462e2917b38ce980ed8
 ```{r}
 library("scatterplot3d") # load
+```
 
-#example(scatterplot3d) 
+```{r, eval=FALSE}
+example(scatterplot3d) 
 ```
 
 This [link](http://www.sthda.com/english/wiki/scatterplot3d-3d-graphics-r-software-and-data-visualization) is really helpful if you want more information and detail about using scatterplot3d to create 3d plots. I won't go over this in detail because in my opinion, there are much more useful ways to create 3D plots that we'll go over in a bit more detail. 
