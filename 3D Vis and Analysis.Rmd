@@ -89,9 +89,12 @@ The scatterplot3d package is the "go-to" package for simple, non-interactive 3D 
 install.packages("scatterplot3d") # Install
 ```
 
+```{r}
 library("scatterplot3d") # load
+```
 
-#example(scatterplot3d) 
+```{r, eval=FALSE}
+example(scatterplot3d) 
 ```
 This [link](http://www.sthda.com/english/wiki/scatterplot3d-3d-graphics-r-software-and-data-visualization) is really helpful if you want more information and detail about using scatterplot3d to create 3d plots. I won't go over this in detail because in my opinion, there are much more useful ways to create 3D plots that we'll go over in a bit more detail. 
 
@@ -169,9 +172,7 @@ rgl.open() #opens a new rgl device.
 scatter3d(x = sep.l, y = pet.l, z = sep.w, 
           xlab = "Sepal Length (cm)", ylab = "Petal Length (cm)",
           zlab = "Sepal Width (cm)")
-widget<-rglwidget() #view the rgl device within your html doc
-if (interactive())
-  widget
+rglwidget() #view the rgl device within your html doc
 ```
 x, y, z are respectively the coordinates of points to be plotted. The arguments y and z can be optional depending on the structure of x.
 
@@ -401,7 +402,7 @@ install.packages("plotly")
 ```
 
 Or you can install the latest from Github. 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 devtools::install_github("ropensci/plotly")
 ```
 You must have R v.3.2.0 for these installs to work. 
