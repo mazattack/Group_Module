@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r setup, echo =FALSE}
-knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
+knitr::opts_chunk$set(cache = TRUE, autodep = FALSE)
 ```
 # Welcome, friends! 
 
@@ -88,11 +88,12 @@ The scatterplot3d package is the "go-to" package for simple, non-interactive 3D 
 ```{r, eval=FALSE}
 install.packages("scatterplot3d") # Install
 ```
-
+```{r}
 library("scatterplot3d") # load
 
 #example(scatterplot3d) 
 ```
+
 This [link](http://www.sthda.com/english/wiki/scatterplot3d-3d-graphics-r-software-and-data-visualization) is really helpful if you want more information and detail about using scatterplot3d to create 3d plots. I won't go over this in detail because in my opinion, there are much more useful ways to create 3D plots that we'll go over in a bit more detail. 
 
 ### {lattice} package 
@@ -160,7 +161,7 @@ You don't necessarily need to use open a new RGL device for each plot.
 
 Here we'll create a scatter plot using {rgl}, in 2 different ways:
 
-### scatter3d()
+###scatter3d()
 
 First, the function scatter3d() uses the {rgl} package to draw a 3D scatter plot with various regression planes. 
 
@@ -169,9 +170,7 @@ rgl.open() #opens a new rgl device.
 scatter3d(x = sep.l, y = pet.l, z = sep.w, 
           xlab = "Sepal Length (cm)", ylab = "Petal Length (cm)",
           zlab = "Sepal Width (cm)")
-widget<-rglwidget() #view the rgl device within your html doc
-if (interactive())
-  widget
+rglwidget() #view the rgl device within your html doc
 ```
 x, y, z are respectively the coordinates of points to be plotted. The arguments y and z can be optional depending on the structure of x.
 
@@ -401,7 +400,7 @@ install.packages("plotly")
 ```
 
 Or you can install the latest from Github. 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 devtools::install_github("ropensci/plotly")
 ```
 You must have R v.3.2.0 for these installs to work. 
@@ -609,10 +608,12 @@ If you'd like more resources, [this link](https://plot.ly/r/) is an amazing reso
 
 Hopefully this first part of our module has given you a good grasp on how to create 3d visualizations in R!
 
+
+
 #Geometric morphometric analysis in R with 3D data
 ![](./Images/geomorph_skull.png)
 
-###NOTE: Many of these functions require feedback in the console or in a popup window, so they will not show in the knitted html. Additionally, the size of the mesh files and other 3D data means that the graphical output of many of these functions cannot be displayed in the html output.
+**NOTE: Many of these functions require feedback in the console or in a popup window, so they will not show in the knitted html. Additionally, the size of the mesh files and other 3D data means that the graphical output of many of these functions cannot be displayed in the html output.**
 
 Geometric morphometrics is a technique used to quantify and analyze patterns in shapes across 2D and 3D specimens. For example, using morphometrics, you could quantify differences in the shape of a specific feature, say, the wing of an insect, within and across multiple species. In this tutorial, you will learn how to import and create landmark data in R for morphometric analysis using the package "geomorph." The geomorph package allows us to make comparisons between specimens across the shapes of fixed points, curves and surfaces.
 
@@ -971,14 +972,13 @@ The following are examples of such analyses using landmark data that quantify 11
 
 ## Basic Analyses
 First, load and allign the plethodon species data set that came with the geomorph package. These data consist of 11 head shape landmarks whose dimensions are alligned to a common x,y grid to produce 11 sets of coordinates that specify a single point in 11 dimensional trait space. 
-```{r setup2, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r, include=FALSE}
 library(geomorph)
 data(plethspecies)
 Y.gpa<-gpagen(plethspecies$land)
 Y.gpa
 ```
-```
+```{r}
 ## Call:
 ## gpagen(A = plethspecies$land) 
 
@@ -1004,7 +1004,7 @@ Y.gpa
 ## [8,] -0.17573253  0.10754464
 ## [9,]  0.05243877  0.11186878
 ##[10,]  0.24134839  0.07648746
-[11,]  0.62919248 -0.03327890
+##[11,]  0.62919248 -0.03327890
 ```
 As you can see, the means of the 11, alligned 2D landmarks are arranged in a table. To view the common, unitless grid containing 11 alligned points, use the following function with the landmark coordinates extracted:
 
@@ -1016,15 +1016,15 @@ plotAllSpecimens(Y.gpa$coords)
 
 You can obtain a summary of the PCA and plot of the first 2 PCs with the following functions. The summary shows the exact and cummulative proportion of total variance explained by most of the PCs.First, convert the data into a 2D data matrix organized by species and then do the PCA and then obtain a plot. 
 
-```{r , include=FALSE}
+```{r, include=FALSE}
 y<-two.d.array(Y.gpa$coords)
 plotTangentSpace(Y.gpa$coords) 
 ```
-```
+```{r}
 ##PC Summary
 
 ##Importance of first k=8 (out of 9) components:
-                           PC1     PC2     PC3      PC4      PC5     PC6      PC7      PC8
+##                          PC1     PC2     PC3      PC4      PC5     PC6      PC7      PC8
 ##Standard deviation     0.01649 0.01059 0.01042 0.007543 0.005143 0.00355 0.002441 0.001259
 ##Proportion of Variance 0.45640 0.18799 0.18199 0.095450 0.044380 0.02115 0.010000 0.002660
 ##Cumulative Proportion  0.45640 0.64439 0.82637 0.921820 0.966200 0.98734 0.997340 1.000000
@@ -1059,11 +1059,11 @@ Y.gpa<-gpagen(plethspecies$land)
 ```
 Example output for the landmarks of one species. 
 
-```
+```{r}
 ##$coords
 ##, , P_cinereus
 
-             [,1]        [,2]
+##          [,1]        [,2]
  ##[1,]  0.21608543 -0.02080337
  ##[2,]  0.25310261 -0.07708298
  ##[3,] -0.01792156 -0.01448663
@@ -1085,7 +1085,7 @@ gp.end
 names(gp.end)<-plethspecies$phy$tip
 names(gp.end)
 ```
-```
+```{r}
 ##[1] 0 0 1 0 0 1 1 0 0
 ##Levels: 0 1
 ##[1] "P_serratus"       "P_cinereus"       "P_shenandoah"     "P_hoffmani"      
@@ -1113,7 +1113,8 @@ method = method to assess significance (simulation or permutation)
 ER<-compare.evol.rates(A=Y.gpa$coords,phy=plethspecies$phy,method=c("simulation"),gp=gp.end,iter=999, print.progress = TRUE)
 ER
 ```
-```
+```{r}
+
 ##Call:
 
 ##Observed Rate Ratio: 1.8372
@@ -1147,7 +1148,7 @@ PS<- physignal(A=Y.gpa$coords,phy=plethspecies$phy,iter=999)
 summary(PS)
 plot(PS)
 ```
-```
+```{r}
 ##Call:
 ##physignal(A = Y.gpa$coords, phy = plethspecies$phy, iter = 999) 
 
@@ -1157,6 +1158,7 @@ plot(PS)
 
 ##Based on 1000 random permutations
 ```
+
 ![](./Images/Fig3PS.jpg)
 
 As you can see, the K value is in the upper tail of the distribution with a p value <0.5. Given an alpha of 0.05, we have support for rejecting the null hypothesis that evolution of these species occuring randomly. Those species who are sister species are more related than would be expected if brownain evolution had occured, the divergence between sister species is not equivalent to the divergence between non-sister species and therefore we should consider phylogeny when doing statisics on these data. Therefore, these phenotypic data support that the species are not all equally related. 
