@@ -42,7 +42,7 @@ unnamed-chunk-42	countries	ICC_WC_T20	mapWorld	nation.x	nation.y	q	.3D_Vis_and_A
 unnamed-chunk-43	
 unnamed-chunk-44	
 unnamed-chunk-45	
-unnamed-chunk-46	
+unnamed-chunk-46	A1_nts	wd
 unnamed-chunk-47	
 unnamed-chunk-48	
 unnamed-chunk-49	
@@ -51,43 +51,43 @@ unnamed-chunk-51
 unnamed-chunk-52	
 load packages	
 load	A1	A2	A3	f1
-unnamed-chunk-53	
+unnamed-chunk-53	A1_temp
 unnamed-chunk-54	
-unnamed-chunk-55	A1_nts	wd
+unnamed-chunk-55	
 unnamed-chunk-56	
-unnamed-chunk-57	
+unnamed-chunk-57	A2_nts	wd
 unnamed-chunk-58	
-unnamed-chunk-59	
+unnamed-chunk-59	A3_nts	wd
 unnamed-chunk-60	
 unnamed-chunk-61	
-unnamed-chunk-62	A1_temp
-unnamed-chunk-63	
+unnamed-chunk-62	
+unnamed-chunk-63	sliders	wd
 unnamed-chunk-64	
 unnamed-chunk-65	
-unnamed-chunk-66	A2_nts	wd
+unnamed-chunk-66	arrow_nts	filelist
 unnamed-chunk-67	
-unnamed-chunk-68	A3_nts	wd
+unnamed-chunk-68	
 unnamed-chunk-69	
 unnamed-chunk-70	
-unnamed-chunk-71	
-unnamed-chunk-72	sliders	wd
+unnamed-chunk-71	GPA
+unnamed-chunk-72	
 unnamed-chunk-73	
-unnamed-chunk-74	
-unnamed-chunk-75	arrow_nts	filelist
+unnamed-chunk-74	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-74_e8093cc98be60a56a7c6d20ca726a9af_meta
+unnamed-chunk-75	alinks
 unnamed-chunk-76	
-unnamed-chunk-77	
+unnamed-chunk-77	meanarrow
 unnamed-chunk-78	
 unnamed-chunk-79	
-unnamed-chunk-80	GPA
+unnamed-chunk-80	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-80_12580ddac4f6e1b9c0bbe1c529caaa42_meta
 unnamed-chunk-81	
-unnamed-chunk-82	
-unnamed-chunk-83	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-83_3e79bbb0e8d49fc9e628978ccb43fcab_meta
-unnamed-chunk-84	alinks
+unnamed-chunk-82	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-82_ceda580d1ba39f7c66d658966dbb1f7a_meta
+unnamed-chunk-83	
+unnamed-chunk-84	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-84_e6a38409e0c76b5010ca1e999e0da448_meta
 unnamed-chunk-85	
-unnamed-chunk-86	meanarrow
+unnamed-chunk-86	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-86_8abd7f42ad86975cfb9805739673d876_meta
 unnamed-chunk-87	
-unnamed-chunk-88	
-unnamed-chunk-89	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-89_6cfa4cf154d7f707022117f5a2522416_meta
+unnamed-chunk-88	y
+unnamed-chunk-89	Y.gpa
 unnamed-chunk-90	
 unnamed-chunk-91	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-91_bf12cbc9d9bf885d1406fee24f22e170_meta
 unnamed-chunk-92	
@@ -103,3 +103,4 @@ setup5	gp.end
 setup1	ER
 setup3	
 setup4	PS
+install	
