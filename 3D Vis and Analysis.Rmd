@@ -9,7 +9,7 @@ output:
     toc_float: true
 ---
 
-```{r, echo =FALSE}
+```{r setup, echo =FALSE}
 knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
 ```
 # Welcome, friends! 
@@ -639,78 +639,7 @@ To load an example dataset:
 
 ```
 
-### Collecting Landmarks
 
-#### Important Requirements for Landmarks
-
-Remember the following requirements for landmarks:
-a. Each image must have the same number of landmarks;
-b. The landmarks on each image must be in the same order;
-c. Landmarks are ordinarily placed on homologous points, points that can be
-replicated from object to object based on common morphology, common
-function, or common geometry;
-d. You may have to flip some images so that are not reversed left to right (e.g., if
-most of your images show the right side, flip left side images so that they
-mimic right side)
-
-#### Collecting landmark coordinates with ImageJ. 
-
-[ImageJ – open-source software for image processing](http://rsbweb.nih.gov/ij/download.html)
-[Point Picker plugin for ImageJ](http://bigwww.epfl.ch/thevenaz/pointpicker/)
-
-##### Installing Point Picker: 
-
-Point Picker is an interactive ImageJ plugin that allows storage and retrieval of a collection of landmarks
-
-Mac OS X
-1. Download the install image
-2. Open the PointPicker.dmg
-3. Copy the folder PointPicker to Applications -> ImageJ -> Plugins
-Windows
-1. Download the installation package
-2. Unzip it
-3. Copy the folder PointPicker to C:/Program Files/ImageJ/Plugins
-
-
-##### Collecting landmarks in ImageJ:
-
-[This user guide on digitizing in ImageJ](http://www.indiana.edu/~g562/Handouts/Collecting%20Landmarks.pdf) is really helpful. 
-
-To collect landmarks using ImageJ
-1. Place all your images in a single folder by themselves
-2. Start ImageJ
-3. open the first image
-
-Repeat the following steps for each image
-4. Start the PointPicker plugin: Plugins -> PointPicker -> PointPicker
-Choose the pen tool (the one with a +) to add points
-6. Carefully place each of your points on the image, always in the same order. If you need to adjust the position, choose the move tool
-7. When all points are placed, click the output button (the one with a piece of paper as the icon). Use the Show option.
-8. Highlight all the data, copy it, paste it into Excel with one blank line above, and one blank line below
-9. The x and y coordinates of your points are in the 2nd and 3rd columns.
-10. Above the x-coordinates, enter the text "LM=" followed by the number of points (e.g. LM=5)
-11. Below the x-coordinates, enter the text "ID=" followed by the taxon name (e.g. ID=Archaeopteryx)
-12. Clear the data window (by closing or clicking the red circle (MAC))
-13. Click the Return to ImageJ button (microscope icon)
-14. Open next image
-15. Repeat from Step 4 until all images are finished
-
-##### Save the landmarks in TPS format
-1. In Excel, highlight columns 2 & 3 from the first “LM=13” to the last
-“ID=Ateleaspis_tesselatai” and copy. For this lab that should be 165 rows with
-two columns.
-2. In Word, use Paste Special to paste these rows as plain text. If you don’t paste
-as plain text then you will have trouble importing the data into Mathematica.
-3. Save the Word document as plain text somewhere convenient.
-
-#### Collecting landmark coordinates with R. 
-
-We can digitize 2D landmarks on .jpg files using the digitize2d function in Geomorph. 
-
-[This user guide](https://rdrr.io/cran/geomorph/man/digitize2d.html) is really helpful for this. 
-Also see 15.1 in [this user guide](file:///Volumes/Julie17/Quick_Guide_to_Geomorph-3.0.pdf). 
-
-The user provides a list of image names, the number of landmarks to be digitized, and the name of an output TPS file. An option is included to allow the user to digitize a scale on each image to convert the landmark coordinates from pixels into meaningful units. Landmarks to be digitized can include both fixed landmarks and semi-landmarks, the latter of which are to be designated as "sliders" for subsequent analysis (see the function define.sliders).
 
 ```{r}
 #digitize2d(filelist, nlandmarks, scale = NULL, tpsfile, MultScale = FALSE, verbose = TRUE)
@@ -880,7 +809,36 @@ name<-file2mesh((curl("https://raw.githubusercontent.com/mazattack/Group_Module/
 
 ## Selecting landmarks
 
-For geomorphometric analysis, we must first select landmarks on each of the specimens which will serve as standardized points, across which measurements and comparisons can be made. "digit.fixed" from the geomorph package is used for selecting fixed landmarks that do not change from specimen to specimen, and "digit.curves" and "digitsurface" are tools for creating semi-landmarks along curves and surfaces which slide between the fixed landmarks. These sliding landmarks can also be defined from existing landmark data using "define.sliders". In this tutorial, we will first define the fixed landmarks for three arrowheads, and create a template of surface semi-landmarks from A1 to calculate the surface landmarks of the other two arrowheads. 
+For geomorphometric analysis, we must first select landmarks on each of the specimens which will serve as standardized points, across which measurements and comparisons can be made. 
+
+### Important Requirements for Landmarks
+
+Remember the following requirements for landmarks:
+a. Each image must have the same number of landmarks;
+b. The landmarks on each image must be in the same order;
+c. Landmarks are ordinarily placed on homologous points, points that can be
+replicated from object to object based on common morphology, common
+function, or common geometry;
+d. You may have to flip some images so that are not reversed left to right (e.g., if
+most of your images show the right side, flip left side images so that they
+mimic right side)
+
+#### Collecting Landmarks on 2D data or with other software. 
+
+Landmarks can be collected with other software, such as ImageJ with Point Picker installed. See these helpful resources:
+[ImageJ – open-source software for image processing](http://rsbweb.nih.gov/ij/download.html)
+[Point Picker plugin for ImageJ](http://bigwww.epfl.ch/thevenaz/pointpicker/)
+[This user guide on digitizing in ImageJ](http://www.indiana.edu/~g562/Handouts/Collecting%20Landmarks.pdf) is really helpful. 
+
+We can digitize 2D landmarks on .jpg files using the digitize2d function in Geomorph. 
+
+[This user guide](https://rdrr.io/cran/geomorph/man/digitize2d.html) is really helpful for this. 
+Also see 15.1 in [this user guide](file:///Volumes/Julie17/Quick_Guide_to_Geomorph-3.0.pdf). 
+
+The user provides a list of image names, the number of landmarks to be digitized, and the name of an output TPS file. An option is included to allow the user to digitize a scale on each image to convert the landmark coordinates from pixels into meaningful units. Landmarks to be digitized can include both fixed landmarks and semi-landmarks, the latter of which are to be designated as "sliders" for subsequent analysis (see the function define.sliders).
+
+### Selecting fixed landmarks
+For 3D data, "digit.fixed" from the geomorph package is used for selecting fixed landmarks that do not change from specimen to specimen, and "digit.curves" and "digitsurface" are tools for creating semi-landmarks along curves and surfaces which slide between the fixed landmarks. These sliding landmarks can also be defined from existing landmark data using "define.sliders". In this tutorial, we will first define the fixed landmarks for three arrowheads, and create a template of surface semi-landmarks from A1 to calculate the surface landmarks of the other two arrowheads. 
 
 Use digit.fixed to selected fixed landmarks on the first specimen, this will save a ".nts" landmark file to the directory. You will use the console to confirm each point using y/n. Double right click to select the landmark *(this works in windows, examine the help file for the function for specific instructions on how to correctly select landmarks using a MAC)*. This can be kind of troublesome. The easiest way is to orient the arrowhead as shown below, and double right click along the edge where the landmarks are highlighted. You should click in the same order for each set of fixed landmarks so keep track of where you start. **Note: for this tutorial, start at the tip of the arrow and select in e clockwise order**.
 
@@ -895,7 +853,7 @@ A1_nts<-readmulti.nts(c("A1_digit.nts"))
 setwd(wd)
 ```
 ![Select landmarks for A1:start at the tip and work clockwise](./Images/A1_digit.png)
-
+###Inspecting landmarks
 We can inspect these landmarks using plotspec to plot the landmarks you have just created on the 3D mesh.
 ```{r eval=FALSE}
 plotspec(A1, A1_fix, centered=TRUE)#these may not overlap unless you specify centered = TRUE
@@ -1161,7 +1119,7 @@ The following are examples of such analyses using landmark data that quantify 11
 
 ## Basic Analyses
 First, load and allign the plethodon species data set that came with the geomorph package. These data consist of 11 head shape landmarks whose dimensions are alligned to a common x,y grid to produce 11 sets of coordinates that specify a single point in 11 dimensional trait space. 
-```{r setup, include=FALSE}
+```{r setup2, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(geomorph)
 data(plethspecies)
@@ -1198,15 +1156,14 @@ Y.gpa
 ```
 As you can see, the means of the 11, alligned 2D landmarks are arranged in a table. To view the common, unitless grid containing 11 alligned points, use the following function with the landmark coordinates extracted:
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r , include=FALSE}
 plotAllSpecimens(Y.gpa$coords)
 ```
 ![](https://github.com/mazattack/Group_Module/blob/master/Geomorph%20FIgures-Zach/Figure%201%20tangentspace.jpg)
 
 You can obtain a summary of the PCA and plot of the first 2 PCs with the following functions. The summary shows the exact and cummulative proportion of total variance explained by most of the PCs.First, convert the data into a 2D data matrix organized by species and then do the PCA and then obtain a plot. 
 
-```{r setup, include=FALSE}
+```{r , include=FALSE}
 y<-two.d.array(Y.gpa$coords)
 plotTangentSpace(Y.gpa$coords) 
 ```
@@ -1242,8 +1199,7 @@ The null distribution is constructed via calculation of a single ER for the enti
 
 1) The plethodon species data used here is the same as was used for earlier analyses. Call the plethodon data and allign with a GPA if not done already. Again, this data consists of 11 head shape landmarks that will be alligned to produce 11 sets of coordinates (each coordinate will have a y and x component) that specify a single point in an 11 dimensional trait space. 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r, include=FALSE}
 library(geomorph)
 data(plethspecies)
 Y.gpa<-gpagen(plethspecies$land)
@@ -1270,7 +1226,7 @@ Example output for the landmarks of one species.
 
 2) Now, establish the two groups of data whose means you'd like to contrast. Here, we'll differentiate between landmark data of endangered (designated level 1) and non-endangered species (designated level 2). These are organized as in the original data set provided in the package.You can also view what you have with the names() function. Note that it will be disorganized if you don't extract the phylogenetic data with the $phy$tip suffix to plethspecies.
 
-```{r setup, include=FALSE}
+```{r setup5, include=FALSE}
 gp.end<-factor(c(0,0,1,0,0,1,1,0,0))
 gp.end
 names(gp.end)<-plethspecies$phy$tip
@@ -1300,7 +1256,7 @@ method = method to assess significance (simulation or permutation)
 	: a permutation test will reshuffle the data to create sampling distributions for the test statistic without resampling.
 	: a simulation test will allow resampling
 
-```{r setup, include=FALSE}
+```{r setup1, include=FALSE}
 ER<-compare.evol.rates(A=Y.gpa$coords,phy=plethspecies$phy,method=c("simulation"),gp=gp.end,iter=999, print.progress = TRUE)
 ER
 ```
@@ -1320,7 +1276,7 @@ ER
 
 The plot() function returns the null distribution showing the frequency of each rate ratio given 1000 iterations of brownian evolution at a fixed rate for the entire phylogeny. The arrow indicates where your test statistic falls on the distribution. Note that because this distribution is recreated for every analysis, although your observed rate ratio will always be the same for contrasting the two given groups, the associated ratio test statistic and p-value will vary as the null distribution changes.
 
-```{r setup, include=FALSE}
+```{r setup3, include=FALSE}
 plot(ER)
 ```
 ![](https://github.com/mazattack/Group_Module/blob/master/Geomorph%20FIgures-Zach/Figure%204%20ER%20plot.jpg)
@@ -1332,7 +1288,7 @@ We can not only calculare ER differences between defined groups of species, but 
 
 The strength of phylogenetic signal(PS) is estimated with a K Statistic that is used to contrast an observed PS to the PS expected under Brownian Motion. The K statistic is a complex ratio. The numerator is observed phenotypic variation/phenotypic variation under phylogenetic covariation.The denomonator is the ratio of phenotypic variation under Brownian Motion/the number of species. As with the ER analysis, geomorph uses a distance-based analysis for estimating PS and the null distribution is constructed analogously: Given a phylogeny, brownian evolution is simulated a specified number of times and a frequency distribution of simulated K values are obtained to which the actual K value is contrasted. The funtions for the PS analysis and distribution are as follows, where A = the data set used and phy = the extracted phylogenetic information. For a more detailed review of PS analysis for multi-dimensional data, see Adams(2014).
 
-```{r setup, include=FALSE}
+```{r setup4, include=FALSE}
 PS<- physignal(A=Y.gpa$coords,phy=plethspecies$phy,iter=999)
 summary(PS)
 plot(PS)
