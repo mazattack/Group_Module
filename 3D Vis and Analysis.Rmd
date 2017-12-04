@@ -8,9 +8,8 @@ output:
     toc_depth: 5
     toc_float: true
 ---
-
 ```{r setup, echo =FALSE}
-knitr::opts_chunk$set(cache = TRUE, autodep = FALSE)
+knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
 ```
 # Welcome, friends! 
 
@@ -88,10 +87,7 @@ The scatterplot3d package is the "go-to" package for simple, non-interactive 3D 
 ```{r, eval=FALSE}
 install.packages("scatterplot3d") # Install
 ```
-<<<<<<< HEAD
-=======
 
->>>>>>> 26c1a90b1f2c735fd9349462e2917b38ce980ed8
 ```{r}
 library("scatterplot3d") # load
 ```

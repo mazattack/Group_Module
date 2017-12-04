@@ -1,3 +1,4 @@
+unnamed-chunk-1	demo	persp
 unnamed-chunk-2	demo	.packages
 unnamed-chunk-3	install.packages
 unnamed-chunk-4	library
@@ -46,11 +47,12 @@ unnamed-chunk-46	data	volcano	dim
 unnamed-chunk-47	p	plot_ly	volcano
 unnamed-chunk-48	install.packages
 unnamed-chunk-49	library	ICC_WC_T20	c	countries	geocode	nation.x	lon	nation.y	lat	mapWorld	borders	q	ggplot	geom_point	aes	ggplotly
+install	install.packages
+load packages	library	geomorph	Morpho	abind	curl	knitr	rgl
+load	library	curl	geomorph	f1	A1	read.ply	A2	A3
 unnamed-chunk-50	plot3d	A1
 unnamed-chunk-51	library	Morpho	name	file2mesh	curl
 unnamed-chunk-52	A1_fix	digit.fixed	A1
-load packages	library	geomorph	Morpho	abind	curl	knitr	rgl
-load	library	curl	geomorph	f1	A1	read.ply	A2	A3
 unnamed-chunk-53	wd	getwd	setwd	A1_nts	readmulti.nts	c
 unnamed-chunk-54	plotspec	A1	A1_fix
 unnamed-chunk-55	plotspec	A1	A1_nts
@@ -92,15 +94,17 @@ unnamed-chunk-90	plotRefToTarget	meanarrow	GPA	coords	gridPar	alinks
 unnamed-chunk-91	plotRefToTarget	meanarrow	GPA	coords	gridPar	alinks	rglwidget
 unnamed-chunk-92	plotRefToTarget	GPA	coords	alinks
 unnamed-chunk-93	plotRefToTarget	GPA	coords	alinks	rglwidget
-unnamed-chunk-94	plotAllSpecimens	Y.gpa	coords
-unnamed-chunk-95	y	two.d.array	Y.gpa	coords	plotTangentSpace
-unnamed-chunk-96	library	geomorph	data	plethspecies	Y.gpa	gpagen	land
-unnamed-chunk-1	demo	persp
-setup2	opts_chunk	set	library	geomorph	data	plethspecies	Y.gpa	gpagen	land
+unnamed-chunk-94	library	geomorph	data	plethspecies	Y.gpa	gpagen	land
+unnamed-chunk-95	
+unnamed-chunk-96	plotAllSpecimens	Y.gpa	coords
 unnamed-chunk-97	y	two.d.array	Y.gpa	coords	plotTangentSpace
-unnamed-chunk-98	library	geomorph	data	plethspecies	Y.gpa	gpagen	land
+unnamed-chunk-98	
+unnamed-chunk-99	library	geomorph	data	plethspecies	Y.gpa	gpagen	land
+unnamed-chunk-100	
 setup5	gp.end	factor	c	names	plethspecies	phy	tip
+unnamed-chunk-101	
 setup1	ER	compare.evol.rates	Y.gpa	coords	plethspecies	phy	c	gp.end
+unnamed-chunk-102	
 setup3	plot	ER
 setup4	PS	physignal	Y.gpa	coords	plethspecies	phy	summary	plot
-install	install.packages
+unnamed-chunk-103	

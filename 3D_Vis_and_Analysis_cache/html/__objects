@@ -1,3 +1,4 @@
+unnamed-chunk-1	
 unnamed-chunk-2	
 unnamed-chunk-3	
 unnamed-chunk-4	
@@ -9,8 +10,8 @@ unnamed-chunk-9
 unnamed-chunk-10	
 unnamed-chunk-11	
 unnamed-chunk-12	
-unnamed-chunk-13	
-unnamed-chunk-14	
+unnamed-chunk-13	.Random.seed
+unnamed-chunk-14	iris
 unnamed-chunk-15	pet.l	sep.l	sep.w	x	y	z
 unnamed-chunk-16	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-16_f912153c715fcdde4e8f6aade9633785_meta
 unnamed-chunk-17	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-17_dd702343484edebc1c0b0d8d7554419e_meta
@@ -40,17 +41,18 @@ unnamed-chunk-40	scatter_plot1	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-40_
 unnamed-chunk-41	scatter_plot2	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-41_872c2622c7a21a394dae4352ed4d6899_meta
 unnamed-chunk-42	scatter_plot3	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-42_14b947686eb0e93b8da6c2668d2b3ce2_meta
 unnamed-chunk-43	scatter_plot4	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-43_56a1faf48ca7ced8c3fd4c8e9b38377a_meta
-unnamed-chunk-44	
+unnamed-chunk-44	AirPassengers
 unnamed-chunk-45	time_series	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-45_fd0db119cff126abcb6110ea0ade19d3_meta
 unnamed-chunk-46	volcano
 unnamed-chunk-47	p	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-47_e9a9ebcb63ce134b479229cab3b05789_meta
 unnamed-chunk-48	
 unnamed-chunk-49	countries	ICC_WC_T20	mapWorld	nation.x	nation.y	q	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-49_b247254f7f6f0a17f740e6e22d000f11_meta	.GeocodedInformation	.GoogleGeocodeQueryCount
+install	
+load packages	
+load	A1	A2	A3	f1
 unnamed-chunk-50	
 unnamed-chunk-51	
 unnamed-chunk-52	
-load packages	
-load	A1	A2	A3	f1
 unnamed-chunk-53	A1_nts	wd
 unnamed-chunk-54	
 unnamed-chunk-55	
@@ -92,15 +94,17 @@ unnamed-chunk-90
 unnamed-chunk-91	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-91_82bad230606fe75c239b3e7d448cac2c_meta
 unnamed-chunk-92	
 unnamed-chunk-93	.3D_Vis_and_Analysis_cache/html/unnamed-chunk-93_262f00c492e7a378381ea56dbd64b060_meta
-unnamed-chunk-94	
-unnamed-chunk-95	y
-unnamed-chunk-96	Y.gpa
-unnamed-chunk-1	
-setup2	Y.gpa	plethspecies
+unnamed-chunk-94	Y.gpa	plethspecies
+unnamed-chunk-95	
+unnamed-chunk-96	
 unnamed-chunk-97	y
-unnamed-chunk-98	Y.gpa
+unnamed-chunk-98	
+unnamed-chunk-99	Y.gpa
+unnamed-chunk-100	
 setup5	gp.end
+unnamed-chunk-101	
 setup1	ER
+unnamed-chunk-102	
 setup3	
 setup4	PS
-install	
+unnamed-chunk-103	
