@@ -25,10 +25,10 @@ Please go forth and scroll down to begin your journey though our group module as
 
 ### persp() function
 
-In the base R graphics system, the function persp() draws perspective plots of a surface over the x–y plane. Uncomment to run demo(persp). The demo will give you an idea of what this function can do. 
+In the base R graphics system, the function persp() draws perspective plots of a surface over the x–y plane. Set eval=TRUE to run demo(persp). The demo will give you an idea of what this function can do. 
 
-```{r}
-#demo(persp)
+```{r, eval=FALSE}
+demo(persp)
 ```
 
 A demo is an .R file that lives in demo/ . Demos are like examples but tend to be longer. We can use the following line of code to check which packages have demo(). 
@@ -39,14 +39,19 @@ demo(package=.packages(all.available = TRUE))
 
 ### {plot3D} package 
 
-The plot3D package builds on on persp() to provide functions for both 2D and 3D plotting. Load the plot3D package and uncomment go through some pretty impressive plot examples:
+The plot3D package builds on on persp() to provide functions for both 2D and 3D plotting. Load the plot3D package and set eval=TRUE go through some pretty impressive plot examples:
+
+```{r, eval=FALSE}
+install.packages("plot3D")
+```
 
 ```{r}
-#install.packages("plot3D")
 library("plot3D")
+```
 
-#example(surf3D) #examples of 3D surfaces
-#example(persp3D) 
+```{r, eval=FALSE}
+example(surf3D) #examples of 3D surfaces
+example(persp3D) 
 ```
 
 Let's do an example on our own. Use surf3D() to create a cut-away view of a Torus.
@@ -78,7 +83,7 @@ Pretty cool, right? :D We can use these functions to create any 3D surface we ca
 
 It turns out there are SO MANY ways to create a 3D scatterplot, and (to me at least) all of them seem really useful and elegant. As you'll see, there are pros and cons to each method - which you should use depends on what function you're plotting for. Here, I'll first go over some non-interactive plotting functions, before getting into some interactive ones. 
 
-The scatterplot3d package is the "go-to" package for simple, non-interactive 3D scatter plots. Load this package and uncomment to go through some examples of spirals, surfaces and 3D scatterplots: 
+The scatterplot3d package is the "go-to" package for simple, non-interactive 3D scatter plots. Load this package and set eval=TRUE to go through some examples of spirals, surfaces and 3D scatterplots: 
 
 ```{r, eval=FALSE}
 install.packages("scatterplot3d") # Install
@@ -92,7 +97,7 @@ This [link](http://www.sthda.com/english/wiki/scatterplot3d-3d-graphics-r-softwa
 
 ### {lattice} package 
 
-The lattice package has its own distinctive look. Once you see one lattice plot it should be pretty easy to distinguish plots made with this package from base graphics plots. Load the package and use an example to see a 3D graph of a volcano, and 3D surface and scatter plots of iris data. 
+The lattice package has its own distinctive look. Once you see one lattice plot it should be pretty easy to distinguish plots made with this package from base graphics plots. Load the package and set eval=TRUE to see a 3D graph of a volcano, and 3D surface and scatter plots of iris data. 
 
 ```{r}
 library(lattice)
@@ -111,7 +116,8 @@ I've gone over sctterplot3d and lattice fairly quickly and with few examples. Th
 Note that an rgl plot can be manually rotated by holding down on the mouse or touchpad. It can be also zoomed using the scroll wheel on a mouse or pressing ctrl + using the touchpad on a PC or two fingers (up or down) on a mac.
 
 ### Install packages
-Let's first install the packages that you'll need for this section: 
+Let's first set eval=TRUE to install the packages that you'll need for this section: 
+
 ```{r, eval=FALSE}
 install.packages("rgl") # install
 install.packages("car") 
@@ -389,14 +395,14 @@ Note: This doesn't animate in the html document, but it should run in the rgl de
 
 Plotly is an R package that helps you create interactive web-based graphs and 3D surfaces.
 
-You can install the package from CRAN.
-```{r}
-#install.packages("plotly")
+You can set eval=TRUE to install the package from CRAN.
+```{r, eval=FALSE}
+install.packages("plotly")
 ```
 
 Or you can install the latest from Github. 
-```{r}
-#devtools::install_github("ropensci/plotly")
+```{r, eval=TRUE}
+devtools::install_github("ropensci/plotly")
 ```
 You must have R v.3.2.0 for these installs to work. 
 
@@ -551,12 +557,15 @@ Aside: As it turns out, there are more than 50 ways to plot this volcano set fro
 ### Using plotly with ggplot2
 
 Ggplot is arguably one of the best data visualization libraries. Plotly has a very useful ggplot converter that quickly and easily turns ggplot2 plots into interactive, web-based plots. 
+Set eval=TRUE if you need to install these packages. 
+
+```{r, eval=FALSE}
+#load necessary libraries
+install.packages('ggplot2')
+install.packages('ggmap')
+```
 
 ```{r}
-#load necessary libraries
-#install.packages('ggplot2')
-#install.packages('ggmap')
-
 library('ggplot2')
 library('ggmap')
 
