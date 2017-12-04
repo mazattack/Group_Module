@@ -1202,7 +1202,7 @@ As you can see, the means of the 11, alligned 2D landmarks are arranged in a tab
 knitr::opts_chunk$set(echo = TRUE)
 plotAllSpecimens(Y.gpa$coords)
 ```
-! [Alt text] https://github.com/ZachCoto/Ants/blob/master/Geomorph%20FIgures/Figure%201%20tangentspace.jpg [Alt text] !
+!(https://github.com/ZachCoto/Ants/blob/master/Geomorph%20FIgures/Figure%201%20tangentspace.jpg)
 
 You can obtain a summary of the PCA and plot of the first 2 PCs with the following functions. The summary shows the exact and cummulative proportion of total variance explained by most of the PCs.First, convert the data into a 2D data matrix organized by species and then do the PCA and then obtain a plot. 
 
