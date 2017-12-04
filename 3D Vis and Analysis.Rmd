@@ -1346,7 +1346,7 @@ P-value: 0.011
 
 Based on 1000 random permutations
 ```
-
+![](https://github.com/mazattack/Group_Module/blob/master/Geomorph%20FIgures-Zach/Fig%203%20PS.jpg)
 
 As you can see, the K value is in the upper tail of the distribution with a p value <0.5. Given an alpha of 0.05, we have support for rejecting the null hypothesis that evolution of these species occuring randomly. Those species who are sister species are more related than would be expected if brownain evolution had occured, the divergence between sister species is not equivalent to the divergence between non-sister species and therefore we should consider phylogeny when doing statisics on these data. Therefore, these phenotypic data support that the species are not all equally related. 
 
