@@ -1209,10 +1209,18 @@ You can obtain a summary of the PCA and plot of the first 2 PCs with the followi
 ```{r setup, include=FALSE}
 y<-two.d.array(Y.gpa$coords)
 plotTangentSpace(Y.gpa$coords) 
+```
+```
+PC Summary
 
+Importance of first k=8 (out of 9) components:
+                           PC1     PC2     PC3      PC4      PC5     PC6      PC7      PC8
+Standard deviation     0.01649 0.01059 0.01042 0.007543 0.005143 0.00355 0.002441 0.001259
+Proportion of Variance 0.45640 0.18799 0.18199 0.095450 0.044380 0.02115 0.010000 0.002660
+Cumulative Proportion  0.45640 0.64439 0.82637 0.921820 0.966200 0.98734 0.997340 1.000000
 ```
 
-Figure 2 PC1 and PC2 plot 
+![](https://github.com/mazattack/Group_Module/blob/master/Geomorph%20FIgures-Zach/Figure%202%20PC%20plot.jpg)
 
 ## Phylogenetic Comparative Biology
 We can also use geomorph to analyze the phylogenetic information contained in multi-dimensional data. For instance, it is useful to study divergence of evolutionary rates between closely related species. An evolutionary rate (ER) can be defined as the net rate of phenotypic or genetic variance over evolutionary time. ERs can be analyzed at different levels of biological organization (from species to populations to within individual variation). From analyzing ERs, we can begin to determine if certain phenotypes or genotypes are more or less evolutionarily labile in order to explain phenotypic differences of interest. We can use the compare.evol.rates() and associated functions to do this. 
@@ -1267,6 +1275,14 @@ gp.end
 names(gp.end)<-plethspecies$phy$tip
 names(gp.end)
 ```
+```
+[1] 0 0 1 0 0 1 1 0 0
+Levels: 0 1
+[1] "P_serratus"       "P_cinereus"       "P_shenandoah"     "P_hoffmani"      
+[5] "P_virginia"       "P_nettingi"       "P_hubrichti"      "P_electromorphus"
+[9] "P_richmondi"     
+```
+
 3) Now the data is ready for running the actual analysis.Use the following function and inputs: 
 compare.evol.rates(A, phy, gp, iter = 999, method = c("simulation",
 "permutation"), print.progress = TRUE)
@@ -1287,12 +1303,25 @@ method = method to assess significance (simulation or permutation)
 ER<-compare.evol.rates(A=Y.gpa$coords,phy=plethspecies$phy,method=c("simulation"),gp=gp.end,iter=999, print.progress = TRUE)
 ER
 ```
+```
+Call:
 
-The plot() function returns the null distribution showing the frequency of each rate ratio given 1000 iterations of brownian evolution at a fixed rate for the entire phylogeny. The arrow indicates where your test statistic falls on the distribution. Note that because this distribution is recreated for every analysis, although your observed rate ratio will always be the same for contrasting the two given groups, the associated ratio test statistic and p-value will vary as the null distribution changes. The summary() function displays the two calculated evolutionary rates.
+
+Observed Rate Ratio: 1.8372
+
+P-value: 0.318
+
+Based on 1000 random permutations
+
+The rate for group 0 is 1.79641754369177e-06  
+
+The rate for group 1 is 3.30041235292046e-06 
+```
+
+The plot() function returns the null distribution showing the frequency of each rate ratio given 1000 iterations of brownian evolution at a fixed rate for the entire phylogeny. The arrow indicates where your test statistic falls on the distribution. Note that because this distribution is recreated for every analysis, although your observed rate ratio will always be the same for contrasting the two given groups, the associated ratio test statistic and p-value will vary as the null distribution changes.
 
 ```{r setup, include=FALSE}
 plot(ER)
-summary(ER)
 ```
 Figure 4 ER plot 
 
