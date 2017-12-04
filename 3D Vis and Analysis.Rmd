@@ -1169,31 +1169,31 @@ Y.gpa<-gpagen(plethspecies$land)
 Y.gpa
 ```
 ```
-Call:
-gpagen(A = plethspecies$land) 
+## Call:
+## gpagen(A = plethspecies$land) 
 
-Generalized Procrustes Analysis
-with Partial Procrustes Superimposition
+## Generalized Procrustes Analysis
+## with Partial Procrustes Superimposition
 
-11 fixed landmarks
-0 semilandmarks (sliders)
-2-dimensional landmarks
-2 GPA iterations to converge
+## 11 fixed landmarks
+## 0 semilandmarks (sliders)
+## 2-dimensional landmarks
+## 2 GPA iterations to converge
 
 
-Consensus (mean) Configuration
+##Consensus (mean) Configuration
 
-                X           Y
- [1,]  0.21321198 -0.02105584
- [2,]  0.24769363 -0.08046387
- [3,] -0.02712554 -0.01550055
- [4,] -0.26228896 -0.09485409
- [5,] -0.29017433 -0.06350496
- [6,] -0.31712433 -0.03118322
- [7,] -0.31143955  0.04394055
- [8,] -0.17573253  0.10754464
- [9,]  0.05243877  0.11186878
-[10,]  0.24134839  0.07648746
+##                X           Y
+## [1,]  0.21321198 -0.02105584
+## [2,]  0.24769363 -0.08046387
+## [3,] -0.02712554 -0.01550055
+## [4,] -0.26228896 -0.09485409
+## [5,] -0.29017433 -0.06350496
+## [6,] -0.31712433 -0.03118322
+## [7,] -0.31143955  0.04394055
+## [8,] -0.17573253  0.10754464
+## [9,]  0.05243877  0.11186878
+##[10,]  0.24134839  0.07648746
 [11,]  0.62919248 -0.03327890
 ```
 As you can see, the means of the 11, alligned 2D landmarks are arranged in a table. To view the common, unitless grid containing 11 alligned points, use the following function with the landmark coordinates extracted:
@@ -1211,13 +1211,13 @@ y<-two.d.array(Y.gpa$coords)
 plotTangentSpace(Y.gpa$coords) 
 ```
 ```
-PC Summary
+##PC Summary
 
-Importance of first k=8 (out of 9) components:
+##Importance of first k=8 (out of 9) components:
                            PC1     PC2     PC3      PC4      PC5     PC6      PC7      PC8
-Standard deviation     0.01649 0.01059 0.01042 0.007543 0.005143 0.00355 0.002441 0.001259
-Proportion of Variance 0.45640 0.18799 0.18199 0.095450 0.044380 0.02115 0.010000 0.002660
-Cumulative Proportion  0.45640 0.64439 0.82637 0.921820 0.966200 0.98734 0.997340 1.000000
+##Standard deviation     0.01649 0.01059 0.01042 0.007543 0.005143 0.00355 0.002441 0.001259
+##Proportion of Variance 0.45640 0.18799 0.18199 0.095450 0.044380 0.02115 0.010000 0.002660
+##Cumulative Proportion  0.45640 0.64439 0.82637 0.921820 0.966200 0.98734 0.997340 1.000000
 ```
 
 ![](https://github.com/mazattack/Group_Module/blob/master/Geomorph%20FIgures-Zach/Figure%202%20PC%20plot.jpg)
@@ -1250,21 +1250,22 @@ Y.gpa<-gpagen(plethspecies$land)
 ```
 Example output for the landmarks of one species. 
 
-```$coords
-, , P_cinereus
+```
+##$coords
+##, , P_cinereus
 
              [,1]        [,2]
- [1,]  0.21608543 -0.02080337
- [2,]  0.25310261 -0.07708298
- [3,] -0.01792156 -0.01448663
- [4,] -0.26651651 -0.09752395
- [5,] -0.28724162 -0.06453206
- [6,] -0.31967119 -0.03239812
- [7,] -0.31362497  0.04171542
- [8,] -0.17675527  0.10909564
- [9,]  0.05039109  0.11565174
-[10,]  0.23977149  0.08099904
-[11,]  0.62238049 -0.04063473
+ ##[1,]  0.21608543 -0.02080337
+ ##[2,]  0.25310261 -0.07708298
+ ##[3,] -0.01792156 -0.01448663
+ ##[4,] -0.26651651 -0.09752395
+ ##[5,] -0.28724162 -0.06453206
+ ##[6,] -0.31967119 -0.03239812
+ ##[7,] -0.31362497  0.04171542
+ ##[8,] -0.17675527  0.10909564
+ ##[9,]  0.05039109  0.11565174
+##[10,]  0.23977149  0.08099904
+##[11,]  0.62238049 -0.04063473
 ```
 
 2) Now, establish the two groups of data whose means you'd like to contrast. Here, we'll differentiate between landmark data of endangered (designated level 1) and non-endangered species (designated level 2). These are organized as in the original data set provided in the package.You can also view what you have with the names() function. Note that it will be disorganized if you don't extract the phylogenetic data with the $phy$tip suffix to plethspecies.
@@ -1276,11 +1277,11 @@ names(gp.end)<-plethspecies$phy$tip
 names(gp.end)
 ```
 ```
-[1] 0 0 1 0 0 1 1 0 0
-Levels: 0 1
-[1] "P_serratus"       "P_cinereus"       "P_shenandoah"     "P_hoffmani"      
-[5] "P_virginia"       "P_nettingi"       "P_hubrichti"      "P_electromorphus"
-[9] "P_richmondi"     
+##[1] 0 0 1 0 0 1 1 0 0
+##Levels: 0 1
+##[1] "P_serratus"       "P_cinereus"       "P_shenandoah"     "P_hoffmani"      
+##[5] "P_virginia"       "P_nettingi"       "P_hubrichti"      "P_electromorphus"
+##[9] "P_richmondi"     
 ```
 
 3) Now the data is ready for running the actual analysis.Use the following function and inputs: 
@@ -1304,17 +1305,17 @@ ER<-compare.evol.rates(A=Y.gpa$coords,phy=plethspecies$phy,method=c("simulation"
 ER
 ```
 ```
-Call:
+##Call:
 
-Observed Rate Ratio: 1.8372
+##Observed Rate Ratio: 1.8372
 
-P-value: 0.318
+##P-value: 0.318
 
-Based on 1000 random permutations
+##Based on 1000 random permutations
 
-The rate for group 0 is 1.79641754369177e-06  
+##The rate for group 0 is 1.79641754369177e-06  
 
-The rate for group 1 is 3.30041235292046e-06 
+##The rate for group 1 is 3.30041235292046e-06 
 ```
 
 The plot() function returns the null distribution showing the frequency of each rate ratio given 1000 iterations of brownian evolution at a fixed rate for the entire phylogeny. The arrow indicates where your test statistic falls on the distribution. Note that because this distribution is recreated for every analysis, although your observed rate ratio will always be the same for contrasting the two given groups, the associated ratio test statistic and p-value will vary as the null distribution changes.
@@ -1337,14 +1338,14 @@ summary(PS)
 plot(PS)
 ```
 ```
-Call:
-physignal(A = Y.gpa$coords, phy = plethspecies$phy, iter = 999) 
+##Call:
+##physignal(A = Y.gpa$coords, phy = plethspecies$phy, iter = 999) 
 
-Observed Phylogenetic Signal (K): 0.9573
+##Observed Phylogenetic Signal (K): 0.9573
 
-P-value: 0.011
+##P-value: 0.011
 
-Based on 1000 random permutations
+##Based on 1000 random permutations
 ```
 ![](https://github.com/mazattack/Group_Module/blob/master/Geomorph%20FIgures-Zach/Fig%203%20PS.jpg)
 
