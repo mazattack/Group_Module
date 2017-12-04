@@ -1168,7 +1168,36 @@ data(plethspecies)
 Y.gpa<-gpagen(plethspecies$land)
 Y.gpa
 ```
+```
+Call:
+gpagen(A = plethspecies$land) 
 
+
+
+Generalized Procrustes Analysis
+with Partial Procrustes Superimposition
+
+11 fixed landmarks
+0 semilandmarks (sliders)
+2-dimensional landmarks
+2 GPA iterations to converge
+
+
+Consensus (mean) Configuration
+
+                X           Y
+ [1,]  0.21321198 -0.02105584
+ [2,]  0.24769363 -0.08046387
+ [3,] -0.02712554 -0.01550055
+ [4,] -0.26228896 -0.09485409
+ [5,] -0.29017433 -0.06350496
+ [6,] -0.31712433 -0.03118322
+ [7,] -0.31143955  0.04394055
+ [8,] -0.17573253  0.10754464
+ [9,]  0.05243877  0.11186878
+[10,]  0.24134839  0.07648746
+[11,]  0.62919248 -0.03327890
+```
 As you can see, the means of the 11, alligned 2D landmarks are arranged in a table. To view the common, unitless grid containing 11 alligned points, use the following function with the landmark coordinates extracted:
 
 ```{r setup, include=FALSE}
