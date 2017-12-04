@@ -1154,7 +1154,149 @@ plotRefToTarget(GPA$coords[,,3], method="point", GPA$coords[,,1],links = alinks)
 rglwidget()
 ```
 
+# Multidimensional Trait Analysis
+Biologically meaningful phenotypes are often multi dimensional simply because real phenotypes are under multidimensional selection, resulting in  modular subunits which interact as a complex, functional phenotype.(For example, if we are interested in the evolution of "Brain Size", we need to take into account how selection operates on different regions of the brain). Therefore, it is necesary to have analyses that can quantify and statiscally contrast multi-dimensional traits. 
 
-#References
-Adams, D.C. and Otárola-Castillo, E. 
-2013  Geomorph: An r package for the collection and analysis of geometric morphometric shape data. Methods in Ecology and Evolution 4(4). 
+The following are examples of such analyses using landmark data that quantify 11 dimensions of head shape for 40 Plethodon salamander species. This will include statisical programs such as PCA applied to high dimensional data sets as well as more novel analyses that allow analysis of phylogenetic information in high dimensional data. All of these analyses work with data that have been alligned via a GPA.  
+
+## Basic Analyses
+First, load and allign the plethodon species data set that came with the geomorph package. These data consist of 11 head shape landmarks whose dimensions are alligned to a common x,y grid to produce 11 sets of coordinates that specify a single point in 11 dimensional trait space. 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(geomorph)
+data(plethspecies)
+Y.gpa<-gpagen(plethspecies$land)
+Y.gpa
+```
+
+As you can see, the means of the 11, alligned 2D landmarks are arranged in a table. To view the common, unitless grid containing 11 alligned points, use the following function with the landmark coordinates extracted:
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+plotAllSpecimens(Y.gpa$coords)
+```
+Figure 1: Plethspecies Grid
+
+You can obtain a summary of the PCA and plot of the first 2 PCs with the following functions. The summary shows the exact and cummulative proportion of total variance explained by most of the PCs.First, convert the data into a 2D data matrix organized by species and then do the PCA and then obtain a plot. 
+
+```{r setup, include=FALSE}
+y<-two.d.array(Y.gpa$coords)
+plotTangentSpace(Y.gpa$coords) 
+
+```
+
+Figure 2 PC1 and PC2 plot 
+
+## Phylogenetic Comparative Biology
+- We can also use geomorph to analyze the phylogenetic information contained in multi-dimensional data. For instance, it is useful to study divergence of evolutionary rates between closely related species. An evolutionary rate (ER) can be defined as the net rate of phenotypic or genetic variance over evolutionary time. ERs can be analyzed at different levels of biological organization (from species to populations to within individual variation). From analyzing ERs, we can begin to determine if certain phenotypes or genotypes are more or less evolutionarily labile in order to explain phenotypic differences of interest. We can use the compare.evol.rates() and associated functions to do this. 
+
+### Function Assumptions
+1) Estimation of ERs is done using either "R" or "Q" approaches. "R" approaches use matrices of ER variances and convariances among different species within a group. "Q" approaches use distance matrices(here, this means pairwise contrasing distances of species from the ancenstral node on a phylogenetic tree). The Q approach is beneficial for analysing multi-dimensional traits because although the number of covariance vlaues is dependent on trait dimensionality, the number of species pairwise distances is not. This allows for hypothesis testing without an increase in the probability of Type I error. The use of the Q approach has two implications for the analysis. First, it necesaitates that the data already be organized into a phylogeny in order for the distance matrix to be constructed. Second, for the sake of simplicity, the model of evolution used here is that of Brownian Motion. For more extensive description of Evolutionary Rate Analysis, see Adams (2013).
+
+2) Under Brownian Motion, particles move multiple times on different axes, with each subsequent displacement being random and independent with respect to the previous displacement and any other particle's displacement. As a result, the mean displacement of a particle is 0 and the net variance in the displacement only varies with time (σ²t). For our purposes, we can think of the particle as the traits of a phenotype moving under Brownian motion around an ancestral node in a high-dimensional morphospace. Evolution under brownian motion can be sumulated many times to produce a distribution of probabilities for the end result of where a given phenoype will existrelative to the ancestral node. The resulting distribution is normal, with a mean of 0 (no net displacment from the ancestral node) and variance as σ²t. The compare.evol.rates() function is most useful if you already have a well established phylogeny with known branch lengths and species distributions. For a more extensive description of the use of brownian Motion in phylogenetic analysis and a detailed text on phylogenetic analysis, see Felsenstein (2004).
+
+3) The analysis presented here makes use of landmark data already applied to a 3D object and contrasts among groups of speces. Again, multi-dimensional data such as 3D landmarks are well suited for this analysis, but any type of multi-dimensional data is applicable and this analysis is only limited to contrasting objects that have evolved from a LCA and have well established phylogenies. Species groups are one example used here, but the same could be done for any other evolving thing.
+
+### Overview of How the Function Works
+
+For the example here, the ERs of 2 species groups will be contrasted. The function calculates the average distance of each species pheotypic value from the ancestral node, calculates the multivariate evolutionary rates for the phenotypic value of each species group, and determines a ratio of the higher rate divided by the lower rate, a value that serves as a test statistic to contrast with a distribution of ratios for the null hypothesis of no difference between group ERs (i.e. a statistically single ER for the whole phylogeny)
+
+The null distribution is constructed via calculation of a single ER for the entire phylogeny. Using the phylogeny and the single ER, simulated phenotypic data sets are produced at the tips of the phylogeny. The number of these simulations is manually determined, but it should be sufficiently hight to produce a reliable null distribution. Using this artificial data, ERs are calculated for the two groups after each simulation and the frequencies of the resulting ERs are used to create a null distribution for the analysis. 
+
+### Working Through The Function
+
+1) The plethodon species data used here is the same as was used for earlier analyses. Call the plethodon data and allign with a GPA if not done already. Again, this data consists of 11 head shape landmarks that will be alligned to produce 11 sets of coordinates (each coordinate will have a y and x component) that specify a single point in an 11 dimensional trait space. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(geomorph)
+data(plethspecies)
+Y.gpa<-gpagen(plethspecies$land)
+```
+Example output for the landmarks of one species. 
+
+$coords
+, , P_cinereus
+
+             [,1]        [,2]
+ [1,]  0.21608543 -0.02080337
+ [2,]  0.25310261 -0.07708298
+ [3,] -0.01792156 -0.01448663
+ [4,] -0.26651651 -0.09752395
+ [5,] -0.28724162 -0.06453206
+ [6,] -0.31967119 -0.03239812
+ [7,] -0.31362497  0.04171542
+ [8,] -0.17675527  0.10909564
+ [9,]  0.05039109  0.11565174
+[10,]  0.23977149  0.08099904
+[11,]  0.62238049 -0.04063473
+
+
+2) Now, establish the two groups of data whose means you'd like to contrast. Here, we'll differentiate between landmark data of endangered (designated level 1) and non-endangered species (designated level 2). These are organized as in the original data set provided in the package.You can also view what you have with the names() function. Note that it will be disorganized if you don't extract the phylogenetic data with the $phy$tip suffix to plethspecies.
+
+```{r setup, include=FALSE}
+gp.end<-factor(c(0,0,1,0,0,1,1,0,0))
+gp.end
+names(gp.end)<-plethspecies$phy$tip
+names(gp.end)
+```
+3) Now the data is ready for running the actual analysis.Use the following function and inputs: 
+compare.evol.rates(A, phy, gp, iter = 999, method = c("simulation",
+"permutation"), print.progress = TRUE)
+
+A = the data set in a 2D matrix (Here, this is the landmark coordinate data set alligned using the Y.gpa function earlier (Y.gpa$coords))
+
+phy = the phylogeny in which the data is organized (Here, this is the data set with the phylogeny extracted (plethspecies$phy))
+
+gp = the factor array that is defined for group membership (Here, this is gp.end)
+
+iter = the number of iterations for significance testing
+
+method = method to assess significance (simulation or permutation)
+	: a permutation test will reshuffle the data to create sampling distributions for the test statistic without resampling.
+	: a simulation test will allow resampling
+
+```{r setup, include=FALSE}
+ER<-compare.evol.rates(A=Y.gpa$coords,phy=plethspecies$phy,method=c("simulation"),gp=gp.end,iter=999, print.progress = TRUE)
+ER
+```
+
+The plot() function returns the null distribution showing the frequency of each rate ratio given 1000 iterations of brownian evolution at a fixed rate for the entire phylogeny. The arrow indicates where your test statistic falls on the distribution. Note that because this distribution is recreated for every analysis, although your observed rate ratio will always be the same for contrasting the two given groups, the associated ratio test statistic and p-value will vary as the null distribution changes. The summary() function displays the two calculated evolutionary rates.
+
+```{r setup, include=FALSE}
+plot(ER)
+summary(ER)
+```
+Figure 4 ER plot 
+
+Based on the null distribution displayed here, the observed rate ratio will occur about 40/1000 (RR=1.8) times (p=0.338) if there is only one true rate for the phylogeny. If our alpha value is 0.05, our data do not support a hypothesis that the species have different evolutionary rates based on their status as endangered or not. 
+
+## Calculating Phylogenetic Signal
+We can not only calculare ER differences between defined groups of species, but estimate whether divergence of sister species is equivalent to divergence between non-sister species using analysis of phylogenetic signal. This is an estimation of the degree of covariation in phenotype due to shared ancestry. The mean head shape data points among the Plethodon species shouldn't be considered independent data because they all have shared evolutionary history and some species groups are more closely related than others. Therefore, geomorph provides a simple function for estimating the strength of phylogenetic signal in high dimensional data.
+
+The strength of phylogenetic signal(PS) is estimated with a K Statistic that is used to contrast an observed PS to the PS expected under Brownian Motion. The K statistic is a complex ratio. The numerator is observed phenotypic variation/phenotypic variation under phylogenetic covariation.The denomonator is the ratio of phenotypic variation under Brownian Motion/the number of species. As with the ER analysis, geomorph uses a distance-based analysis for estimating PS and the null distribution is constructed analogously: Given a phylogeny, brownian evolution is simulated a specified number of times and a frequency distribution of simulated K values are obtained to which the actual K value is contrasted. The funtions for the PS analysis and distribution are as follows, where A = the data set used and phy = the extracted phylogenetic information. For a more detailed review of PS analysis for multi-dimensional data, see Adams(2014).
+
+```{r setup, include=FALSE}
+PS<- physignal(A=Y.gpa$coords,phy=plethspecies$phy,iter=999)
+summary(PS)
+plot(PS)
+```
+Figure 3
+
+As you can see, the K value is in the upper tail of the distribution with a p value <0.5. Given an alpha of 0.05, we have support for rejecting the null hypothesis that evolution of these species occuring randomly. Those species who are sister species are more related than would be expected if brownain evolution had occured, the divergence between sister species is not equivalent to the divergence between non-sister species and therefore we should consider phylogeny when doing statisics on these data. Therefore, these phenotypic data support that the species are not all equally related. 
+
+For an overview of all of Geomorph's functions and datasets, see the Package Documentation by Adams et al (2017)
+
+
+# References Cited:
+
+Adams, D.C.; Collyer,M; Kaliontzopoulou,A; Sherratt,E (2017) Geometric Morphometric Analyses of 2D/3D Landmark Data. URL: http://geomorphr.github.io/geomorph/
+
+Adams, D.C. (2014) A Generalized K Statistic for Estimating Phylogenetic Signal from Shape and Other High-Dimensional Multivariate Data. Syst. Biol.63(5): 685-697
+
+Adams, D.C. (2013) Quantifying and Comparing Phylogenetic Evolutionary Rates for Shape and Other
+High-Dimensional Phenotypic Data. Syst. Biol. 63(2):166–177
+
+Adams, D.C. and Otárola-Castillo, E. 2013  Geomorph: An r package for the collection and analysis of geometric morphometric shape data. Methods in Ecology and Evolution 4(4). 
+
+Felsenstein J (2004) Inferring phylogenies. Sunderland (MA): SinauerAssociates 391-392
