@@ -9,7 +9,7 @@ output:
     toc_float: true
 ---
 
-```{r, echo =FALSE}
+```{r setup, echo =FALSE}
 knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
 ```
 # Welcome, friends! 
@@ -18,6 +18,8 @@ Please go forth and scroll down to begin your journey though our group module as
 1. First, Julie will cover how to plot 3d surfaces, both non-interactively and interactively.  
 2. Then Maria will cover how to collect and plot 3d landmark data.  
 3. Finally, Zach will go over how to analyze landmark data.  
+
+**A note before we start: Macs need XQuartz installed to be able to view images which use the rgl package. See the modules from Week 1 for instructions and click [here](https://www.xquartz.org/) to download.**
 
 ## A brief introduction to non-interactive 3D plots
 
@@ -598,259 +600,18 @@ If you'd like more resources, [this link](https://plot.ly/r/) is an amazing reso
 
 Hopefully this first part of our module has given you a good grasp on how to create 3d visualizations in R!
 
-## Getting Started in Geometric Morphometrics in R using the Geomorph R Package {.tabset}
-
-I followed [this link](file:///Volumes/Julie17/Quick_Guide_to_Geomorph-3.0.pdf) heavily for general geomorph proceedings. 
-
-To install geomorph from CRAN:
-```{r}
-# install.packages("geomorph", dependencies = TRUE)
-```
-
-This will install the latest version of geomorph from CRAN https://cran.rstudio.com/.
-
-CRAN restricts the number of updates package maintainers can make in a year. Occasionally, bugs slip
-through that need to be fixed immediately. We maintain a “Stable” version of the current CRAN version of geomorph in our GitHub repository, which can be installed as source.
-
-To install the source package from GitHub:
-
-```{r}
-#install.packages("devtools", dependencies = TRUE)
-#devtools::install_github("geomorphR/geomorph",ref = "Stable")
-```
-
-
-To load the package: 
-```{r}
-#library(geomorph)
-```
-
-You’ll notice that a black warning message is printed in the console saying the package rgl and ape are also loaded. All of the 3D plots of interactive functions of geomorph are run through rgl https://cran.r-project.org/web/packages/rgl/index.html. ape is called for several phylogenetic analyses.
-
-
-### Exploring sample data from Geomorph: 
-
-There are 12 datasets included with geomorph: plethodon, scallops, hummingbirds, larvalTails, larvalMorph, mosquito, ratland, plethspecies, plethShapeFood, pupfish, motionpaths and scallopPLY. 
-
-It is advised to run and examine these example datasets before performing own analyses in order to understand how a function and its options work.
-
-To load an example dataset:
-
-```{r}
-#data(plethodon)
-#attributes(plethodon)
-
-##explore these data
-#head(plethodon$land[,,1])
-#head(plethodon$links)
-#plethodon$species
-#plethodon$site
-#head(plethodon$outline)
-
-```
-
-### Collecting Landmarks
-
-#### Important Requirements for Landmarks
-
-Remember the following requirements for landmarks:
-a. Each image must have the same number of landmarks;
-b. The landmarks on each image must be in the same order;
-c. Landmarks are ordinarily placed on homologous points, points that can be
-replicated from object to object based on common morphology, common
-function, or common geometry;
-d. You may have to flip some images so that are not reversed left to right (e.g., if
-most of your images show the right side, flip left side images so that they
-mimic right side)
-
-#### Collecting landmark coordinates with ImageJ. 
-
-[ImageJ – open-source software for image processing](http://rsbweb.nih.gov/ij/download.html)
-[Point Picker plugin for ImageJ](http://bigwww.epfl.ch/thevenaz/pointpicker/)
-
-##### Installing Point Picker: 
-
-Point Picker is an interactive ImageJ plugin that allows storage and retrieval of a collection of landmarks
-
-Mac OS X
-1. Download the install image
-2. Open the PointPicker.dmg
-3. Copy the folder PointPicker to Applications -> ImageJ -> Plugins
-Windows
-1. Download the installation package
-2. Unzip it
-3. Copy the folder PointPicker to C:/Program Files/ImageJ/Plugins
-
-
-##### Collecting landmarks in ImageJ:
-
-[This user guide on digitizing in ImageJ](http://www.indiana.edu/~g562/Handouts/Collecting%20Landmarks.pdf) is really helpful. 
-
-To collect landmarks using ImageJ
-1. Place all your images in a single folder by themselves
-2. Start ImageJ
-3. open the first image
-
-Repeat the following steps for each image
-4. Start the PointPicker plugin: Plugins -> PointPicker -> PointPicker
-Choose the pen tool (the one with a +) to add points
-6. Carefully place each of your points on the image, always in the same order. If you need to adjust the position, choose the move tool
-7. When all points are placed, click the output button (the one with a piece of paper as the icon). Use the Show option.
-8. Highlight all the data, copy it, paste it into Excel with one blank line above, and one blank line below
-9. The x and y coordinates of your points are in the 2nd and 3rd columns.
-10. Above the x-coordinates, enter the text "LM=" followed by the number of points (e.g. LM=5)
-11. Below the x-coordinates, enter the text "ID=" followed by the taxon name (e.g. ID=Archaeopteryx)
-12. Clear the data window (by closing or clicking the red circle (MAC))
-13. Click the Return to ImageJ button (microscope icon)
-14. Open next image
-15. Repeat from Step 4 until all images are finished
-
-##### Save the landmarks in TPS format
-1. In Excel, highlight columns 2 & 3 from the first “LM=13” to the last
-“ID=Ateleaspis_tesselatai” and copy. For this lab that should be 165 rows with
-two columns.
-2. In Word, use Paste Special to paste these rows as plain text. If you don’t paste
-as plain text then you will have trouble importing the data into Mathematica.
-3. Save the Word document as plain text somewhere convenient.
-
-#### Collecting landmark coordinates with R. 
-
-We can digitize 2D landmarks on .jpg files using the digitize2d function in Geomorph. 
-
-[This user guide](https://rdrr.io/cran/geomorph/man/digitize2d.html) is really helpful for this. 
-Also see 15.1 in [this user guide](file:///Volumes/Julie17/Quick_Guide_to_Geomorph-3.0.pdf). 
-
-The user provides a list of image names, the number of landmarks to be digitized, and the name of an output TPS file. An option is included to allow the user to digitize a scale on each image to convert the landmark coordinates from pixels into meaningful units. Landmarks to be digitized can include both fixed landmarks and semi-landmarks, the latter of which are to be designated as "sliders" for subsequent analysis (see the function define.sliders).
-
-```{r}
-#digitize2d(filelist, nlandmarks, scale = NULL, tpsfile, MultScale = FALSE, verbose = TRUE)
-```
-
-filelist = list of names of jpeg images to be digitized
-nlandmarks = number of landmarks to be digitized
-scale = a vector containing the length of the scale to be placed on each image (eg. 10 for 10mm)
-tpsfile = the name of a TPS file to be created or read
-Multscale = a logical option indicating if the coordinates should be pre-multiplied by scale
-verbose = logical. user decides whether to digitize in verbose or silent format. default is verbose. 
-
-##### The Digitizing Session
-
-Digitizing landmarks from 2D photos requires that a scale bar is placed in the image in order to scale the coordinate data. The 'scale' option requires: a single number (e.g. 10) which means that the scale to be measured in all images is a 10mm scale bar; OR a vector the same length as the filelist containing a number for the scale of each image. If scale=NULL, then the digitized coordinates will not be scaled. This option is NOT recommended.
-
-Users may digitize all specimens in one session, or may return at a later time to complete digitizing. In the latter case, the user provides the same filelist and TPS file and the function will determine where the user left off.
-
-If specimens have missing landmarks, these can be incorporated during the digitizing process using the 'a' option as described below (a=absent).
-
-##### Specimen Digitizing
-
-Digitizing landmarks involves landmark selection using a mouse in the plot window, using the LEFT mouse button (or regular button for Mac users):
-
-Digitize the scale bar (if requested) by selecting the two end points. Use a single click for start and end points. The user is asked whether the system should keep or discard the digitized scale bar.
-Digitize each landmark with single click and the landmark is shown in red.
-If verbose = TRUE, digitizing is interactive between landmark selection using a mouse and the R console. Once a landmark is selected, the user is asked if the system should keep or discard the selection (y/n/a). If "y", the user is asked to continue to select the next landmark. If "n", the user is asked to select it again.
-
-To digitize a missing landmark, simply click on any location in the image. Then, when prompted to keep selection, choose 'a' (for absent). Missing landmarks can only be included during the digitizing process when verbose=TRUE.
-
-If verbose = FALSE the digitizing of landmarks is continuous and uninterrupted. Here the user will not be prompted to approve each landmark selection.
-
-At the end of digitizing, the landmark coordinates are written to a TPS file. By default, the x,y values are unscaled if a vector of scales is included, and the scale is returned on line SCALE= after each specimen x,y data. Optionally, one may have the coordinates pre-multiplied by scale by using the option MultScale=TRUE.
-
-##### Value from digitized2d: 
-
-Function returns a tps file containing the digitized landmark coordinates.
-
-#### Importing landmark data into R
-
-Whether you used R or ImageJ to collect digitized landmark coordinates, you can use R to import those landmark data: 
-
-Landmark data brought into R can be in a variety of formats. Our functions can deal with the most common:
-tps files, nts files, and morphologicka files. 
-
-The following section describes how to use these functions on these files. 
-
-At the end, we describe how data brought in as a simple excel-style matrix can be imported and manipluated into the correct format.
-
-All of these functions return a 3D array, which is the preferred data format for landmark data.
-
-```{r}
-#readland.tps(file, specID = c("None", "ID", "imageID"), readcurves = FALSE, warnmsg = TRUE)
-```
-
-Arguments
-* file A .tps file containing two- or three-dimensional landmark data
-* specID a character specifying whether to extract the specimen ID names from the ID or IMAGE lines
-(default is “None”)
-* readcurves A logical value stating whether CURVES= field and associated coordinate data will be read as
-semilandmarks (TRUE) or ignored (FALSE)
-* warnmsg A logical value stating whether warnings should be printed
-
-This function reads a .tps file containing two- or three-dimensional landmark coordinates for a set of specimens.
-Tps files are text files in one of the standard formats for geometric morphometrics (see Rohlf 2010). Twodimensional
-landmarks coordinates are designated by the identifier “LM=”, while three-dimensional data are
-designated by “LM3=”. Landmark coordinates are multiplied by their scale factor if this is provided for all
-specimens. If one or more specimens are missing the scale factor (there is no line “SCALE=”), landmarks are
-treated in their original units.
-
-The name of the specimen can be given in the tps file by “ID=” (use specID=”ID”) or “IMAGE=” (use
-specID= “imageID”), otherwise the function defaults to specID= “None”.
-
-If there are curves defined in the file (i.e., CURVES= fields), the option readcurves should be used. When
-readcurves = TRUE, the coordinate data for the curves will be returned as semilandmarks and will be
-appended to the fixed landmark data. Then the user needs to use define.sliders to create a matrix designating
-how the curve points will slide (used by ‘curves=’ in gpagen). When readcurves = FALSE, only the landmark
-data are returned (the curves are ignored).
-
-At present, all other information that can be contained in tps files (comments, variables, radii, etc.) is ignored.
-
-#### Data inspection:
-
-##### Plot landmark coordinates for all specimens (plotAllSpecimens)
-Function plots landmark coordinates for a set of specimens.
-
-```{r}
-#plotAllSpecimens(A, mean = TRUE, links = NULL, label = FALSE, plot.param = list())
-```
-Arguments
-• A A 3D array (p x k x n) containing GPA-aligned coordinates for a set of specimens
-• mean A logical value indicating whether the mean shape should be included in the plot
-• links An optional matrix defining for links between landmarks
-• pointscale An optional value defining the size of the points for all specimens
-• meansize An optional value defining the size of the points representing the average specimen
-The function creates a plot of the landmark coordinates for all specimens. This is useful for examining
-patterns of shape variation after GPA. If “mean=TRUE”, the mean shape will be calculated and added to
-the plot. Additionally, if a matrix of links is provided, the landmarks of the mean shape will be connected
-by lines. The link matrix is an m x 2 matrix, where m is the desired number of links. Each row of the link
-matrix designates the two landmarks to be connected by that link. The function will plot either two- or
-three-dimensional data.
-
-Example for 2D data: 
-
-```{r}
-
-#Y.gpa<-gpagen(plethodon$land, print.progress = FALSE) # GPA
-#plethodon$links
-
-#plotAllSpecimens(Y.gpa$coords,links=plethodon$links,label=T,
-#plot.param = list(pt.bg = "green", mean.cex=1, link.col="red",txt.pos=3, txt.cex=1))
-
-```
-
-Example for 3D data: 
-
-```{r}
-
-#data(scallops)
-#Y.gpa <- gpagen(A=scallops$coorddata, curves=scallops$curvslide, surfaces=scallops$surfslide, print.progress = FALSE)
-#scallinks <- matrix(c(1,rep(2:16, each=2),1), nrow=16, byrow=TRUE) # make links matrix
-#plotAllSpecimens(Y.gpa$coords,links=scallinks, plot.param= list(pt.bg = "blue",link.col="red"))
-
-```
-
 #Geometric morphometric analysis in R with 3D data
 ![](./Images/geomorph_skull.png)
+
 ###NOTE: Many of these functions require feedback in the console or in a popup window, so they will not show in the knitted html. Additionally, the size of the mesh files and other 3D data means that the graphical output of many of these functions cannot be displayed in the html output.
 
-Geometric morphometrics is a technique used to quantify and analyze patterns in shapes across 2D and 3D specimens. For example, using morphometrics, you could quantify differences in the shape of a specific feature, say, the wing of an insect, within and across multiple species. In this tutorial, you will learn how to import and create landmark data in R for morphometric analysis using the package Geomorph. The geomorph package allows us to make comparisons between specimens across the shapes of fixed points, curves and surfaces.
+Geometric morphometrics is a technique used to quantify and analyze patterns in shapes across 2D and 3D specimens. For example, using morphometrics, you could quantify differences in the shape of a specific feature, say, the wing of an insect, within and across multiple species. In this tutorial, you will learn how to import and create landmark data in R for morphometric analysis using the package "geomorph." The geomorph package allows us to make comparisons between specimens across the shapes of fixed points, curves and surfaces.
+
+##Install geomorph
+To install "geomorph", making sure dependencies = TRUE so that it installs packages that geomorph depends on also. 
+```{r install, eval=FALSE}
+install.packages("geomorph", dependencies = TRUE)
+```
 
 ###Packages used in this section
 ```{r load packages}
@@ -859,13 +620,13 @@ library(Morpho)
 library(abind)
 library(curl)
 library(knitr)
-library(rgl)
+library(rgl)#Installed with geomorph
 ```
-###Note: macs also need XQuartz installed. See the modules from Week 1 for instructions.
+
 
 ##Importing 3D data
 
-The Geomorph package allows you to input 3D data in ASCII ".ply" format which is a **common output from 3D scanners and 3D software packages**. Here you will load three 3D scans of archaeological arrow heads from an online repository of 3D models [âsketchfabâ](https://sketchfab.com/demoon/collections/ref_weapon_neolit)
+The Geomorph package allows you to input 3D data in ASCII ".ply" format which is a common output from 3D scanners. Here you will load three 3D scans of archaeological arrow heads from an online repository of 3D models [âsketchfabâ](https://sketchfab.com/demoon/collections/ref_weapon_neolit)
 
 Note: this may take a couple of minutes
 ```{r load}
@@ -890,7 +651,36 @@ name<-file2mesh((curl("https://raw.githubusercontent.com/mazattack/Group_Module/
 
 ## Selecting landmarks
 
-For geomorphometric analysis, we must first select landmarks on each of the specimens which will serve as standardized points, across which measurements and comparisons can be made. "digit.fixed" from the geomorph package is used for selecting fixed landmarks that do not change from specimen to specimen, and "digit.curves" and "digitsurface" are tools for creating semi-landmarks along curves and surfaces which slide between the fixed landmarks. These sliding landmarks can also be defined from existing landmark data using "define.sliders". In this tutorial, we will first define the fixed landmarks for three arrowheads, and create a template of surface semi-landmarks from A1 to calculate the surface landmarks of the other two arrowheads. 
+For geomorphometric analysis, we must first select landmarks on each of the specimens which will serve as standardized points, across which measurements and comparisons can be made. 
+
+### Important Requirements for Landmarks
+
+Remember the following requirements for landmarks:
+a. Each image must have the same number of landmarks;
+b. The landmarks on each image must be in the same order;
+c. Landmarks are ordinarily placed on homologous points, points that can be
+replicated from object to object based on common morphology, common
+function, or common geometry;
+d. You may have to flip some images so that are not reversed left to right (e.g., if
+most of your images show the right side, flip left side images so that they
+mimic right side)
+
+#### Collecting Landmarks on 2D data or with other software. 
+
+Landmarks can be collected with other software, such as ImageJ with Point Picker installed. See these helpful resources:
+[ImageJ – open-source software for image processing](http://rsbweb.nih.gov/ij/download.html)
+[Point Picker plugin for ImageJ](http://bigwww.epfl.ch/thevenaz/pointpicker/)
+[This user guide on digitizing in ImageJ](http://www.indiana.edu/~g562/Handouts/Collecting%20Landmarks.pdf) is really helpful. 
+
+We can digitize 2D landmarks on .jpg files using the digitize2d function in Geomorph. 
+
+[This user guide](https://rdrr.io/cran/geomorph/man/digitize2d.html) is really helpful for this. 
+Also see 15.1 in [this user guide](file:///Volumes/Julie17/Quick_Guide_to_Geomorph-3.0.pdf). 
+
+The user provides a list of image names, the number of landmarks to be digitized, and the name of an output TPS file. An option is included to allow the user to digitize a scale on each image to convert the landmark coordinates from pixels into meaningful units. Landmarks to be digitized can include both fixed landmarks and semi-landmarks, the latter of which are to be designated as "sliders" for subsequent analysis (see the function define.sliders).
+
+### Selecting fixed landmarks on 3D data
+For 3D data, "digit.fixed" from the geomorph package is used for selecting fixed landmarks that do not change from specimen to specimen, and "digit.curves" and "digitsurface" are tools for creating semi-landmarks along curves and surfaces which slide between the fixed landmarks. These sliding landmarks can also be defined from existing landmark data using "define.sliders". In this tutorial, we will first define the fixed landmarks for three arrowheads, and create a template of surface semi-landmarks from A1 to calculate the surface landmarks of the other two arrowheads. 
 
 Use digit.fixed to selected fixed landmarks on the first specimen, this will save a ".nts" landmark file to the directory. You will use the console to confirm each point using y/n. Double right click to select the landmark *(this works in windows, examine the help file for the function for specific instructions on how to correctly select landmarks using a MAC)*. This can be kind of troublesome. The easiest way is to orient the arrowhead as shown below, and double right click along the edge where the landmarks are highlighted. You should click in the same order for each set of fixed landmarks so keep track of where you start. **Note: for this tutorial, start at the tip of the arrow and select in e clockwise order**.
 
@@ -905,7 +695,7 @@ A1_nts<-readmulti.nts(c("A1_digit.nts"))
 setwd(wd)
 ```
 ![Select landmarks for A1:start at the tip and work clockwise](./Images/A1_digit.png)
-
+###Inspecting landmarks
 We can inspect these landmarks using plotspec to plot the landmarks you have just created on the 3D mesh.
 ```{r eval=FALSE}
 plotspec(A1, A1_fix, centered=TRUE)#these may not overlap unless you specify centered = TRUE
@@ -970,7 +760,7 @@ digitsurface(A2, A2_nts[,,1], 1, TRUE)
 ```
 
 We can also run the digitsurface using existing landmark data. Let's use an nts file I created for A3. First read in the data. Since we are working with ".nts" files, we can use readmulti.nts to load the data.  
-#UPDATE FINAL Download the landmark file A3.nts from https://github.com/mazattack/Group_Module/tree/master/Data and place it in your working directory. Reminder, to see your working directory, use getwd().
+Download the landmark file A3.nts from https://github.com/mazattack/Group_Module/tree/master/Data and place it in your working directory. Reminder, to see your working directory, use getwd().
 
 ```{r echo=FALSE, results="hide"}
 wd<-getwd()
@@ -980,7 +770,7 @@ setwd(wd)
 ```
 
 ```{r eval=FALSE, results="hide"}
-A3_nts<- readmulti.nts(c("A3_digit.nts"))
+A3_nts<- readmulti.nts(c("A3.nts"))
 digitsurface(A3, A3_nts[,,1], 1, TRUE)
 ```
 ```{r echo=FALSE, results="hide"}
@@ -1006,9 +796,11 @@ Now that we have imported all our 3D models, loaded and created the fixed and se
 
 ##Importing landmark data
 
-  If you have a single .nts file with the landmarks of multiple specimens use readlands.nts to import. 
+Whether you used R or ImageJ to collect digitized landmark coordinates, you can use R to import those landmark data. Landmark data brought into R can be in a variety of formats. Our functions can deal with the most common: tps files, nts files, and morphologicka files. All of these functions return a 3D array, which is the preferred data format for landmark data.
 
-  If you have multiple .nts files with the landmarks of a single specimen use readmulti.nts. 
+* If you have a single .nts file with the landmarks of multiple specimens use readlands.nts to import. 
+* If you have multiple .nts files with the landmarks of a single specimen use readmulti.nts.
+* If you have a single .tps file, used readlands.tps
 
 First you must create a filelist containing an array of the file names you will import.
 ```{r eval=FALSE}
@@ -1120,7 +912,6 @@ plotAllSpecimens(GPA$coords, links=alinks)
 ```
 To view the mean shape created by gpagen, we can use the function mshape
 ```{r}
-library(geomorph)
 meanarrow<-mshape(GPA$coords)
 ```
 ```{r}
@@ -1171,7 +962,7 @@ The following are examples of such analyses using landmark data that quantify 11
 
 ## Basic Analyses
 First, load and allign the plethodon species data set that came with the geomorph package. These data consist of 11 head shape landmarks whose dimensions are alligned to a common x,y grid to produce 11 sets of coordinates that specify a single point in 11 dimensional trait space. 
-```{r setup, include=FALSE}
+```{r setup2, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(geomorph)
 data(plethspecies)
@@ -1208,15 +999,15 @@ Y.gpa
 ```
 As you can see, the means of the 11, alligned 2D landmarks are arranged in a table. To view the common, unitless grid containing 11 alligned points, use the following function with the landmark coordinates extracted:
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r , include=FALSE}
 plotAllSpecimens(Y.gpa$coords)
 ```
-![](https://github.com/mazattack/Group_Module/blob/master/Geomorph%20FIgures-Zach/Figure%201%20tangentspace.jpg)
+
+![](./Images/Figure1tangentspace.jpg)
 
 You can obtain a summary of the PCA and plot of the first 2 PCs with the following functions. The summary shows the exact and cummulative proportion of total variance explained by most of the PCs.First, convert the data into a 2D data matrix organized by species and then do the PCA and then obtain a plot. 
 
-```{r setup, include=FALSE}
+```{r , include=FALSE}
 y<-two.d.array(Y.gpa$coords)
 plotTangentSpace(Y.gpa$coords) 
 ```
@@ -1230,7 +1021,7 @@ plotTangentSpace(Y.gpa$coords)
 ##Cumulative Proportion  0.45640 0.64439 0.82637 0.921820 0.966200 0.98734 0.997340 1.000000
 ```
 
-![](https://github.com/mazattack/Group_Module/blob/master/Geomorph%20FIgures-Zach/Figure%202%20PC%20plot.jpg)
+![](./Images/Figure2PCplot.jpg)
 
 ## Phylogenetic Comparative Biology
 We can also use geomorph to analyze the phylogenetic information contained in multi-dimensional data. For instance, it is useful to study divergence of evolutionary rates between closely related species. An evolutionary rate (ER) can be defined as the net rate of phenotypic or genetic variance over evolutionary time. ERs can be analyzed at different levels of biological organization (from species to populations to within individual variation). From analyzing ERs, we can begin to determine if certain phenotypes or genotypes are more or less evolutionarily labile in order to explain phenotypic differences of interest. We can use the compare.evol.rates() and associated functions to do this. 
@@ -1252,8 +1043,7 @@ The null distribution is constructed via calculation of a single ER for the enti
 
 1) The plethodon species data used here is the same as was used for earlier analyses. Call the plethodon data and allign with a GPA if not done already. Again, this data consists of 11 head shape landmarks that will be alligned to produce 11 sets of coordinates (each coordinate will have a y and x component) that specify a single point in an 11 dimensional trait space. 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r, include=FALSE}
 library(geomorph)
 data(plethspecies)
 Y.gpa<-gpagen(plethspecies$land)
@@ -1280,7 +1070,7 @@ Example output for the landmarks of one species.
 
 2) Now, establish the two groups of data whose means you'd like to contrast. Here, we'll differentiate between landmark data of endangered (designated level 1) and non-endangered species (designated level 2). These are organized as in the original data set provided in the package.You can also view what you have with the names() function. Note that it will be disorganized if you don't extract the phylogenetic data with the $phy$tip suffix to plethspecies.
 
-```{r setup, include=FALSE}
+```{r setup5, include=FALSE}
 gp.end<-factor(c(0,0,1,0,0,1,1,0,0))
 gp.end
 names(gp.end)<-plethspecies$phy$tip
@@ -1310,7 +1100,7 @@ method = method to assess significance (simulation or permutation)
 	: a permutation test will reshuffle the data to create sampling distributions for the test statistic without resampling.
 	: a simulation test will allow resampling
 
-```{r setup, include=FALSE}
+```{r setup1, include=FALSE}
 ER<-compare.evol.rates(A=Y.gpa$coords,phy=plethspecies$phy,method=c("simulation"),gp=gp.end,iter=999, print.progress = TRUE)
 ER
 ```
@@ -1330,10 +1120,11 @@ ER
 
 The plot() function returns the null distribution showing the frequency of each rate ratio given 1000 iterations of brownian evolution at a fixed rate for the entire phylogeny. The arrow indicates where your test statistic falls on the distribution. Note that because this distribution is recreated for every analysis, although your observed rate ratio will always be the same for contrasting the two given groups, the associated ratio test statistic and p-value will vary as the null distribution changes.
 
-```{r setup, include=FALSE}
+```{r setup3, include=FALSE}
 plot(ER)
 ```
-![](https://github.com/mazattack/Group_Module/blob/master/Geomorph%20FIgures-Zach/Figure%204%20ER%20plot.jpg)
+
+![](./Images/Figure4ERplot.jpg)
 
 Based on the null distribution and summary data, the observed rate ratio will occur about 40/1000 (RR=1.8) times (p=0.338) if there is only one true rate for the phylogeny. If our alpha value is 0.05, our data do not support a hypothesis that the species have different evolutionary rates based on their status as endangered or not. 
 
@@ -1342,7 +1133,7 @@ We can not only calculare ER differences between defined groups of species, but 
 
 The strength of phylogenetic signal(PS) is estimated with a K Statistic that is used to contrast an observed PS to the PS expected under Brownian Motion. The K statistic is a complex ratio. The numerator is observed phenotypic variation/phenotypic variation under phylogenetic covariation.The denomonator is the ratio of phenotypic variation under Brownian Motion/the number of species. As with the ER analysis, geomorph uses a distance-based analysis for estimating PS and the null distribution is constructed analogously: Given a phylogeny, brownian evolution is simulated a specified number of times and a frequency distribution of simulated K values are obtained to which the actual K value is contrasted. The funtions for the PS analysis and distribution are as follows, where A = the data set used and phy = the extracted phylogenetic information. For a more detailed review of PS analysis for multi-dimensional data, see Adams(2014).
 
-```{r setup, include=FALSE}
+```{r setup4, include=FALSE}
 PS<- physignal(A=Y.gpa$coords,phy=plethspecies$phy,iter=999)
 summary(PS)
 plot(PS)
@@ -1357,7 +1148,7 @@ plot(PS)
 
 ##Based on 1000 random permutations
 ```
-![](https://github.com/mazattack/Group_Module/blob/master/Geomorph%20FIgures-Zach/Fig%203%20PS.jpg)
+![](./Images/Fig3PS.jpg)
 
 As you can see, the K value is in the upper tail of the distribution with a p value <0.5. Given an alpha of 0.05, we have support for rejecting the null hypothesis that evolution of these species occuring randomly. Those species who are sister species are more related than would be expected if brownain evolution had occured, the divergence between sister species is not equivalent to the divergence between non-sister species and therefore we should consider phylogeny when doing statisics on these data. Therefore, these phenotypic data support that the species are not all equally related. 
 
