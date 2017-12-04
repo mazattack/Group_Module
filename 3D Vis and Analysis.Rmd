@@ -78,13 +78,15 @@ It turns out there are SO MANY ways to create a 3D scatterplot, and (to me at le
 
 The scatterplot3d package is the "go-to" package for simple, non-interactive 3D scatter plots. Load this package and uncomment to go through some examples of spirals, surfaces and 3D scatterplots: 
 
-```{r}
-#install.packages("scatterplot3d") # Install
+```{r, eval=FALSE}
+install.packages("scatterplot3d") # Install
+```
+
 library("scatterplot3d") # load
 
 #example(scatterplot3d) 
 ```
-This [link](http://www.sthda.com/english/wiki/scatterplot3d-3d-graphics-r-software-and-data-visualization) is really helpful if you want more information and detail about using scatterplot3d to create 3d plots. I won't go over this in detail because in my opinion, there are much more useful ways to create 3D plots. 
+This [link](http://www.sthda.com/english/wiki/scatterplot3d-3d-graphics-r-software-and-data-visualization) is really helpful if you want more information and detail about using scatterplot3d to create 3d plots. I won't go over this in detail because in my opinion, there are much more useful ways to create 3D plots that we'll go over in a bit more detail. 
 
 ### {lattice} package 
 
@@ -92,7 +94,10 @@ The lattice package has its own distinctive look. Once you see one lattice plot 
 
 ```{r}
 library(lattice)
-# example(cloud)
+```
+
+```{r, eval=FALSE}
+example(cloud)
 ```
 
 ## Interactive 3D plotting using the {rgl} package 
@@ -105,9 +110,12 @@ Note that an rgl plot can be manually rotated by holding down on the mouse or to
 
 ### Install packages
 Let's first install the packages that you'll need for this section: 
+```{r, eval=FALSE}
+install.packages("rgl") # install
+install.packages("car") 
+```
+
 ```{r}
-#install.packages("rgl") # install
-#install.packages("car") 
 library("rgl") #load
 library("car")
 ```
@@ -149,11 +157,13 @@ Here we'll create a scatter plot using {rgl}, in 2 different ways:
 First, the function scatter3d() uses the {rgl} package to draw a 3D scatter plot with various regression planes. 
 
 ```{r}
-#rgl.open() #opens a new rgl device. 
+rgl.open() #opens a new rgl device. 
 scatter3d(x = sep.l, y = pet.l, z = sep.w, 
           xlab = "Sepal Length (cm)", ylab = "Petal Length (cm)",
           zlab = "Sepal Width (cm)")
-rglwidget() #view the rgl device within your html doc
+widget<-rglwidget() #view the rgl device within your html doc
+if (interactive())
+  widget
 ```
 x, y, z are respectively the coordinates of points to be plotted. The arguments y and z can be optional depending on the structure of x.
 
