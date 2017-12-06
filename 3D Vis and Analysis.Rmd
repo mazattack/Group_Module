@@ -1,7 +1,7 @@
 ---
 title: "3D Visualization and Analysis"
 author: "Maria Codlin, Julie Jung, Zach Coto"
-date: "November 28, 2017"
+date: "December 12 2017"
 output: 
   html_document:
     toc: true
@@ -9,7 +9,7 @@ output:
     toc_float: true
 ---
 ```{r setup, echo =FALSE}
-knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
+knitr::opts_chunk$set(cache = TRUE)
 ```
 # Welcome, friends! 
 
@@ -19,6 +19,10 @@ Please go forth and scroll down to begin your journey though our group module as
 3. Finally, Zach will go over how to analyze landmark data.  
 
 **A note before we start: Macs need XQuartz installed to be able to view images which use the rgl package. See the modules from Week 1 for instructions and click [here](https://www.xquartz.org/) to download.**
+
+**Also, it's important to run through this in R studio. Many of these functions require feedback in the console or in a popup window, so they will not show in the knitted html. Additionally, the size of the mesh files and other 3D data means that the graphical output of many of these functions cannot be displayed correctly in the html output.**
+
+# Part I : Plotting in 3D
 
 ## A brief introduction to non-interactive 3D plots
 
@@ -116,7 +120,7 @@ I've gone over sctterplot3d and lattice fairly quickly and with few examples. Th
 
 {rgl} is a 3D graphics package that produces real-time interactive 3D plots. It allows you to interactively rotate, zoom, and select regions of your graphic. 
 
-Note that an rgl plot can be manually rotated by holding down on the mouse or touchpad. It can be also zoomed using the scroll wheel on a mouse or pressing ctrl + using the touchpad on a PC or two fingers (up or down) on a mac.
+Note that an rgl plot can be manually rotated by holding down on the mouse or touchpad. It can be also zoomed using the scroll wheel on a mouse or pressing ctrl + using the touchpad on a PC or two fingers (up or down) on a mac. These functions may not work in html, but should if you run in R/Rstudio. 
 
 ### Install packages
 Let's first set eval=TRUE to install the packages that you'll need for this section: 
@@ -127,8 +131,8 @@ install.packages("car")
 ```
 
 ```{r}
-library("rgl") #load
 library("car")
+library("rgl") #load
 ```
 
 ### Prepare the data
@@ -168,7 +172,6 @@ Here we'll create a scatter plot using {rgl}, in 2 different ways:
 First, the function scatter3d() uses the {rgl} package to draw a 3D scatter plot with various regression planes. 
 
 ```{r}
-rgl.open() #opens a new rgl device. 
 scatter3d(x = sep.l, y = pet.l, z = sep.w, 
           xlab = "Sepal Length (cm)", ylab = "Petal Length (cm)",
           zlab = "Sepal Width (cm)")
@@ -251,7 +254,6 @@ For example,
 
 The function rgl.points() is used to draw a basic 3D scatter plot:
 ```{r}
-rgl.open() # Open a new RGL device
 rgl.bg(color = "white") # Setup the background color
 rgl.points(x, y, z, color ="blue", size =5) # Scatter plot
 rgl.spheres(x, y, z, r = 0.2, color = "grey") # change the shape of points to spheres with center (x, y, z) and radius r. 
@@ -272,7 +274,6 @@ Some extra formatting tools for rgl.bbox are:
 
 The function identify3d(), within the {car} package allows you to label points interactively with the mouse. 
 ```{r}
-rgl.open() # Open a new RGL device
 rgl.bg(color = "white") # Setup the background color
 rgl.points(x, y, z, color ="blue", size =5) # Scatter plot
 # identify3d(x = sep.l, y = pet.l, z = sep.w, labels=row.names(iris), buttons=c("left", "right"))
@@ -291,7 +292,6 @@ The values x2, y2 and y3 corresponds to the 3D coordinates of the line ending po
 
 ```{r}
 # Make a scatter plot
-rgl.open() 
 rgl.spheres(x, y, z, r = 0.2, color = "yellow") 
 # Add x, y, and z Axes
 rgl.lines(c(min(x), max(x)), c(0, 0), c(0, 0), color = "black")
@@ -317,7 +317,6 @@ z1 <- (z - min(z))/(max(z) - min(z))
 
 ```{r}
 # Make a scatter plot
-rgl.open() 
 rgl.spheres(x1, y1, z1, r = 0.02, color = "yellow") 
 # Add x, y, and z Axes
 rgl.lines(c(0, 1), c(0, 0), c(0, 0), color = "black")
@@ -335,7 +334,6 @@ lim <- function(x){c(-max(abs(x)), max(abs(x))) * 1.1}
 
 ```{r}
 # Make a scatter plot
-rgl.open() 
 rgl.spheres(x, y, z, r = 0.2, color = "yellow") 
 # Add x, y, and z Axes
 rgl.lines(lim(x), c(0, 0), c(0, 0), color = "black")
@@ -375,7 +373,6 @@ z <- r*sin(lat)
 Open a window for our creation (optional) and use the function persp3d() to draw a globe. 
 
 ```{r}
-open3d()
 persp3d(x, y, z, col = "white", 
        texture = system.file("textures/worldsmall.png", package = "rgl"), 
        specular = "black", axes = FALSE, box = FALSE, xlab = "", ylab = "", zlab = "",
@@ -610,12 +607,26 @@ If you'd like more resources, [this link](https://plot.ly/r/) is an amazing reso
 
 Hopefully this first part of our module has given you a good grasp on how to create 3d visualizations in R!
 
+```{r, echo=FALSE}
+detachAllPackages <- function() {
+
+  basic.packages <- c("package:stats","package:graphics","package:grDevices","package:utils","package:datasets","package:methods","package:base")
+
+  package.list <- search()[ifelse(unlist(gregexpr("package:",search()))==1,TRUE,FALSE)]
+
+  package.list <- setdiff(package.list,basic.packages)
+
+  if (length(package.list)>0)  for (package in package.list) detach(package, character.only=TRUE)
+
+}
+
+detachAllPackages()
+```
 
 
-#Geometric morphometric analysis in R with 3D data
+
+#Part II: Geometric morphometric analysis in R with 3D data
 ![](./Images/geomorph_skull.png)
-
-**NOTE: Many of these functions require feedback in the console or in a popup window, so they will not show in the knitted html. Additionally, the size of the mesh files and other 3D data means that the graphical output of many of these functions cannot be displayed in the html output.**
 
 Geometric morphometrics is a technique used to quantify and analyze patterns in shapes across 2D and 3D specimens. For example, using morphometrics, you could quantify differences in the shape of a specific feature, say, the wing of an insect, within and across multiple species. In this tutorial, you will learn how to import and create landmark data in R for morphometric analysis using the package "geomorph." The geomorph package allows us to make comparisons between specimens across the shapes of fixed points, curves and surfaces.
 
@@ -638,7 +649,7 @@ library(rgl)#Installed with geomorph
 
 ##Importing 3D data
 
-The Geomorph package allows you to input 3D data in ASCII ".ply" format which is a common output from 3D scanners. Here you will load three 3D scans of archaeological arrow heads from an online repository of 3D models [âsketchfabâ](https://sketchfab.com/demoon/collections/ref_weapon_neolit)
+The Geomorph package allows you to input 3D data in ASCII ".ply" format which is a common output from 3D scanners. Here you will load three 3D scans of archaeological arrow heads from an online repository of 3D models [sketchfab](https://sketchfab.com/demoon/collections/ref_weapon_neolit)
 
 Note: this may take a couple of minutes
 ```{r load}
@@ -967,14 +978,31 @@ plotRefToTarget(GPA$coords[,,3], method="point", GPA$coords[,,1],links = alinks)
 rglwidget()
 ```
 
-# Multidimensional Trait Analysis
+```{r, echo=FALSE}
+detachAllPackages <- function() {
+
+  basic.packages <- c("package:stats","package:graphics","package:grDevices","package:utils","package:datasets","package:methods","package:base")
+
+  package.list <- search()[ifelse(unlist(gregexpr("package:",search()))==1,TRUE,FALSE)]
+
+  package.list <- setdiff(package.list,basic.packages)
+
+  if (length(package.list)>0)  for (package in package.list) detach(package, character.only=TRUE)
+
+}
+
+detachAllPackages()
+```
+
+#Part III: Multidimensional Trait Analysis
 Biologically meaningful phenotypes are often multi dimensional simply because real phenotypes are under multidimensional selection, resulting in  modular subunits which interact as a complex, functional phenotype.(For example, if we are interested in the evolution of "Brain Size", we need to take into account how selection operates on different regions of the brain). Therefore, it is necesary to have analyses that can quantify and statiscally contrast multi-dimensional traits. 
 
 The following are examples of such analyses using landmark data that quantify 11 dimensions of head shape for 40 Plethodon salamander species. This will include statisical programs such as PCA applied to high dimensional data sets as well as more novel analyses that allow analysis of phylogenetic information in high dimensional data. All of these analyses work with data that have been alligned via a GPA.  
 
 ## Basic Analyses
 First, load and allign the plethodon species data set that came with the geomorph package. These data consist of 11 head shape landmarks whose dimensions are alligned to a common x,y grid to produce 11 sets of coordinates that specify a single point in 11 dimensional trait space. 
-```{r, include=FALSE}
+
+```{r, eval=FALSE}
 library(geomorph)
 data(plethspecies)
 Y.gpa<-gpagen(plethspecies$land)
@@ -1010,7 +1038,7 @@ Y.gpa
 ```
 As you can see, the means of the 11, alligned 2D landmarks are arranged in a table. To view the common, unitless grid containing 11 alligned points, use the following function with the landmark coordinates extracted:
 
-```{r , include=FALSE}
+```{r , eval=FALSE}
 plotAllSpecimens(Y.gpa$coords)
 ```
 
@@ -1018,7 +1046,7 @@ plotAllSpecimens(Y.gpa$coords)
 
 You can obtain a summary of the PCA and plot of the first 2 PCs with the following functions. The summary shows the exact and cummulative proportion of total variance explained by most of the PCs.First, convert the data into a 2D data matrix organized by species and then do the PCA and then obtain a plot. 
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 y<-two.d.array(Y.gpa$coords)
 plotTangentSpace(Y.gpa$coords) 
 ```
@@ -1054,7 +1082,7 @@ The null distribution is constructed via calculation of a single ER for the enti
 
 1) The plethodon species data used here is the same as was used for earlier analyses. Call the plethodon data and allign with a GPA if not done already. Again, this data consists of 11 head shape landmarks that will be alligned to produce 11 sets of coordinates (each coordinate will have a y and x component) that specify a single point in an 11 dimensional trait space. 
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 library(geomorph)
 data(plethspecies)
 Y.gpa<-gpagen(plethspecies$land)
@@ -1081,7 +1109,7 @@ Example output for the landmarks of one species.
 
 2) Now, establish the two groups of data whose means you'd like to contrast. Here, we'll differentiate between landmark data of endangered (designated level 1) and non-endangered species (designated level 2). These are organized as in the original data set provided in the package.You can also view what you have with the names() function. Note that it will be disorganized if you don't extract the phylogenetic data with the $phy$tip suffix to plethspecies.
 
-```{r setup5, include=FALSE}
+```{r setup5, eval=FALSE}
 gp.end<-factor(c(0,0,1,0,0,1,1,0,0))
 gp.end
 names(gp.end)<-plethspecies$phy$tip
@@ -1111,7 +1139,7 @@ method = method to assess significance (simulation or permutation)
 	: a permutation test will reshuffle the data to create sampling distributions for the test statistic without resampling.
 	: a simulation test will allow resampling
 
-```{r setup1, include=FALSE}
+```{r setup1, eval=FALSE}
 ER<-compare.evol.rates(A=Y.gpa$coords,phy=plethspecies$phy,method=c("simulation"),gp=gp.end,iter=999, print.progress = TRUE)
 ER
 ```
@@ -1132,7 +1160,7 @@ ER
 
 The plot() function returns the null distribution showing the frequency of each rate ratio given 1000 iterations of brownian evolution at a fixed rate for the entire phylogeny. The arrow indicates where your test statistic falls on the distribution. Note that because this distribution is recreated for every analysis, although your observed rate ratio will always be the same for contrasting the two given groups, the associated ratio test statistic and p-value will vary as the null distribution changes.
 
-```{r setup3, include=FALSE}
+```{r setup3, eval=FALSE}
 plot(ER)
 ```
 
@@ -1145,7 +1173,7 @@ We can not only calculare ER differences between defined groups of species, but 
 
 The strength of phylogenetic signal(PS) is estimated with a K Statistic that is used to contrast an observed PS to the PS expected under Brownian Motion. The K statistic is a complex ratio. The numerator is observed phenotypic variation/phenotypic variation under phylogenetic covariation.The denomonator is the ratio of phenotypic variation under Brownian Motion/the number of species. As with the ER analysis, geomorph uses a distance-based analysis for estimating PS and the null distribution is constructed analogously: Given a phylogeny, brownian evolution is simulated a specified number of times and a frequency distribution of simulated K values are obtained to which the actual K value is contrasted. The funtions for the PS analysis and distribution are as follows, where A = the data set used and phy = the extracted phylogenetic information. For a more detailed review of PS analysis for multi-dimensional data, see Adams(2014).
 
-```{r setup4, include=FALSE}
+```{r setup4, eval=FALSE}
 PS<- physignal(A=Y.gpa$coords,phy=plethspecies$phy,iter=999)
 summary(PS)
 plot(PS)
